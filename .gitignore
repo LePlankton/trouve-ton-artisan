@@ -1,0 +1,19 @@
+# --- Dépendances (la lourde) ---
+node_modules/
+
+# --- Secrets (la secrète) ---
+.env
+.env.*
+!.env.example
+
+# --- Build (la générée) ---
+dist/
+build/
+
+# --- Logs ---
+*.log
+npm-debug.log*
+
+# --- Fichiers système / éditeur ---
+Thumbs.db
+.DS_Store
