@@ -63,7 +63,7 @@ CREATE TABLE artisan (
     a_propos      TEXT,
     email         VARCHAR(255) NOT NULL,
 
-    -- « Le cas échéant » (brief) : 6 artisans sur 17 n'ont pas de site.
+    -- « Le cas échéant » (brief) : 7 artisans sur 17 n'ont pas de site.
     site_web      VARCHAR(255) DEFAULT NULL,
 
     -- Les « artisans du mois » mis en avant sur la page d'accueil.
