@@ -16,4 +16,6 @@ npm-debug.log*
 
 # --- Fichiers système / éditeur ---
 Thumbs.db
-.DS_Store~$*
+.DS_Store
+~$*
+
