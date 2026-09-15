@@ -11,5 +11,6 @@ export const sequelize = new Sequelize(
     port: Number(process.env.DB_PORT),
     dialect: 'mysql',
     logging: false,
+    dialectOptions: { decimalNumbers: true },
   }
 );

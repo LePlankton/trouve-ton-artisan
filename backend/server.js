@@ -11,9 +11,9 @@ app.get('/api/sante', (req, res) => {
   res.json({ statut: 'ok' });
 });
 
-// Démarrage du serveur Express sur le port défini dans les variables d'environnement
 const PORT = process.env.PORT || 3000;
 
+// Démarrage du serveur Express après vérification de la connexion à la base de données
 try {
   // Test de la connexion à la base de données
   await sequelize.authenticate();
@@ -25,5 +25,3 @@ try {
   console.error('Échec du démarrage du serveur :', error);
   process.exit(1); // Arrêt du processus en cas d'échec du démarrage du serveur
 }
-
-
