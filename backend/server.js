@@ -4,12 +4,19 @@ import express from 'express';
 // Importation de la connexion à la base de données
 import { sequelize } from './src/config/database.js';
 
+// Importation des routes pour les catégories et les artisans
+import categorieRoutes from './src/routes/categorieRoutes.js';
+import artisanRoutes from './src/routes/artisanRoutes.js';
+
 // Création de l'application Express avec une route GET /api/sante qui répond { "statut": "ok" }
 const app = express();
 
 app.get('/api/sante', (req, res) => {
   res.json({ statut: 'ok' });
 });
+
+app.use('/api/categories', categorieRoutes);
+app.use('/api/artisans', artisanRoutes);
 
 const PORT = process.env.PORT || 3000;
 
