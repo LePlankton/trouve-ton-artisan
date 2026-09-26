@@ -15,7 +15,11 @@ export async function listerArtisansDuMois(req, res) {
 // Le détail d'un artisan, pour sa fiche.
 export async function afficherArtisan(req, res) {
   const artisan = await Artisan.findByPk(req.params.id, {
-    include: { model: Specialite, attributes: ['nom'], include: { model: Categorie, attributes: ['nom'] } },
+    include: {
+      model: Specialite,
+      attributes: ['nom'],
+      include: { model: Categorie, attributes: ['nom'] },
+    },
   });
 
   if (!artisan) {
@@ -43,7 +47,11 @@ export async function listerArtisans(req, res) {
   const artisans = await Artisan.findAll({
     where: filtreArtisan,
     attributes: ['id', 'nom', 'note', 'ville'],
-    include: { model: Specialite, attributes: ['nom'], where: filtreSpecialite },
+    include: {
+      model: Specialite,
+      attributes: ['nom'],
+      where: filtreSpecialite,
+    },
     order: [['nom', 'ASC']],
   });
 
@@ -56,6 +64,18 @@ export async function contacterArtisan(req, res) {
 
   if (!nom || !email || !objet || !message) {
     return res.status(400).json({ message: 'Tous les champs sont requis.' });
+  }
+
+  if (message.length > 2000 || objet.length > 150 || nom.length > 100) {
+    return res
+      .status(400)
+      .json({ message: 'Un ou plusieurs champs sont trop longs.' });
+  }
+
+  if (!email.includes('@')) {
+    return res
+      .status(400)
+      .json({ message: "L'adresse e-mail n'est pas valide." });
   }
 
   const artisan = await Artisan.findByPk(req.params.id);
@@ -72,6 +92,5 @@ export async function contacterArtisan(req, res) {
     text: message,
   });
 
-  res.json({ message: "Votre message a bien été envoyé." });
+  res.json({ message: 'Votre message a bien été envoyé.' });
 }
- 

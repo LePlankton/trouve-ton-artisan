@@ -1,5 +1,13 @@
 import { Router } from 'express';
 import { listerArtisansDuMois, afficherArtisan, listerArtisans, contacterArtisan } from '../controllers/artisanController.js';
+import rateLimit from 'express-rate-limit';
+
+// Pas plus de 5 messages par quart d'heure et par adresse IP
+const limiteurContact = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  message: { message: 'Trop de messages envoyés. Réessayez dans quelques minutes.' },
+});
 
 const router = Router();
 
@@ -13,6 +21,6 @@ router.get('/top', listerArtisansDuMois);
 router.get('/:id', afficherArtisan);
 
 // Route pour contacter un artisan via l'email.
-router.post('/:id/contact', contacterArtisan);
+router.post('/:id/contact', limiteurContact, contacterArtisan);
 
 export default router;
