@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { listerArtisansDuMois, afficherArtisan, listerArtisans } from '../controllers/artisanController.js';
+import { listerArtisansDuMois, afficherArtisan, listerArtisans, contacterArtisan } from '../controllers/artisanController.js';
 
 const router = Router();
 
@@ -11,5 +11,8 @@ router.get('/top', listerArtisansDuMois);
 
 // Route pour afficher le détail d'un artisan.
 router.get('/:id', afficherArtisan);
+
+// Route pour contacter un artisan via l'email.
+router.post('/:id/contact', contacterArtisan);
 
 export default router;

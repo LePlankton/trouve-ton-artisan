@@ -11,6 +11,9 @@ import artisanRoutes from './src/routes/artisanRoutes.js';
 // Création de l'application Express avec une route GET /api/sante qui répond { "statut": "ok" }
 const app = express();
 
+// Lecture du corps des requêtes en JSON
+app.use(express.json({ limit: '100kb' }));
+
 app.get('/api/sante', (req, res) => {
   res.json({ statut: 'ok' });
 });

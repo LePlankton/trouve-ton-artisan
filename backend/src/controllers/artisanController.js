@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import { Artisan, Specialite, Categorie } from '../models/index.js';
+import { transporteur } from '../config/mail.js';
 
 // Les artisans mis en avant sur la page d'accueil.
 export async function listerArtisansDuMois(req, res) {
@@ -48,3 +49,29 @@ export async function listerArtisans(req, res) {
 
   res.json(artisans);
 }
+
+// Contacter un artisan via l'email
+export async function contacterArtisan(req, res) {
+  const { nom, email, objet, message } = req.body ?? {};
+
+  if (!nom || !email || !objet || !message) {
+    return res.status(400).json({ message: 'Tous les champs sont requis.' });
+  }
+
+  const artisan = await Artisan.findByPk(req.params.id);
+
+  if (!artisan) {
+    return res.status(404).json({ message: "Cet artisan n'existe pas." });
+  }
+
+  await transporteur.sendMail({
+    from: process.env.MAIL_EXPEDITEUR,
+    replyTo: `${nom} <${email}>`,
+    to: artisan.email,
+    subject: objet,
+    text: message,
+  });
+
+  res.json({ message: "Votre message a bien été envoyé." });
+}
+ 
