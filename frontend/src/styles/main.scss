@@ -1,0 +1,10 @@
+// Nos valeurs sont passées à Bootstrap AVANT qu'il ne se compile.
+@use 'bootstrap/scss/bootstrap' with (
+  $primary:   #0074c7,
+  $secondary: #384050,
+  $danger:    #CD2C2E,
+  $success:   #82B864,
+
+  $body-color: #384050,
+  $font-family-sans-serif: ('Inter', 'Segoe UI', system-ui, sans-serif)
+);
