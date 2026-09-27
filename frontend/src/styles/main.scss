@@ -1,10 +1,28 @@
 // Nos valeurs sont passées à Bootstrap AVANT qu'il ne se compile.
 @use 'bootstrap/scss/bootstrap' with (
-  $primary:   #0074c7,
+  $primary: #0074c7,
   $secondary: #384050,
-  $danger:    #CD2C2E,
-  $success:   #82B864,
+  $danger: #cd2c2e,
+  $success: #82b864,
 
   $body-color: #384050,
-  $font-family-sans-serif: ('Inter', 'Segoe UI', system-ui, sans-serif)
+  $font-family-sans-serif: (
+    'Inter',
+    'Segoe UI',
+    system-ui,
+    sans-serif,
+  )
 );
+
+@use 'footer';
+@use 'header';
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}

@@ -1,0 +1,166 @@
+// Valeurs relevées sur les planches Figma header-mobile et header-desktop.
+$bordure-header: rgba(56, 64, 80, 0.2);
+$bordure-champ: rgba(0, 73, 124, 0.15);
+
+.entete {
+  background-color: #fff;
+  border-bottom: 1px solid $bordure-header;
+
+  // --- Mobile et tablette : logo + burger, puis la recherche dessous.
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding-block: 12px;
+  }
+
+  .logo {
+    display: block;
+    width: 222px;
+    height: auto;
+  }
+
+  .logo-desktop {
+    display: none;
+  }
+
+  .burger {
+    margin-left: auto;
+    width: 44px; // cible tactile de 44 px, l'icône n'en fait que 20
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    color: #384050;
+  }
+
+  // Le menu n'apparaît qu'une fois le burger actionné.
+  .menu {
+    display: none;
+    width: 100%;
+    order: 3; // toujours après la recherche
+  }
+
+  .menu--ouvert {
+    display: block;
+  }
+
+  .menu ul {
+    margin-bottom: 0;
+  }
+
+  .menu a {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding-inline: 16px;
+    border-bottom: 1px solid $bordure-champ;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    color: #00497c;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible,
+    &.active {
+      background-color: #f1f8fc;
+    }
+  }
+
+  // --- Le champ de recherche
+  .recherche {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 48px;
+    padding-inline: 10px;
+    border: 1px solid $bordure-champ;
+    border-radius: 8px;
+
+    &:focus-within {
+      border-color: #0074c7;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      font-size: 16px;
+      line-height: 26px;
+      color: #384050;
+
+      &::placeholder {
+        color: rgba(56, 64, 80, 0.3);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .icone {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+// --- Desktop : une seule ligne de 96 px.
+@media (min-width: 992px) {
+  .entete {
+    .container {
+      flex-wrap: nowrap;
+      gap: 40px;
+      height: 96px;
+      padding-block: 0;
+    }
+
+    .logo {
+      display: none;
+    }
+
+    .logo-desktop {
+      display: block;
+      width: 246px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .burger {
+      display: none;
+    }
+
+    .menu {
+      display: block;
+      width: auto;
+      order: 0;
+      flex: 1;
+    }
+
+    .menu ul {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .menu a {
+      height: 48px;
+      padding-inline: 16px;
+      border-bottom: 0;
+      border-radius: 4px;
+      font-size: 16px;
+      line-height: 19px;
+    }
+
+    .recherche {
+      width: 320px;
+      flex-shrink: 0;
+    }
+  }
+}
