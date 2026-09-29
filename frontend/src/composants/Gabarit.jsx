@@ -17,7 +17,7 @@ function Gabarit() {
       <Header categories={categories} />
 
       <main>
-        <Outlet />
+        <Outlet context={categories} />
       </main>
 
       <Footer categories={categories} />

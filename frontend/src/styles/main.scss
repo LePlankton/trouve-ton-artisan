@@ -18,6 +18,8 @@
 @use 'header';
 @use 'card';
 @use 'accueil';
+@use 'liste';
+@use 'fiche';
 
 body {
   display: flex;

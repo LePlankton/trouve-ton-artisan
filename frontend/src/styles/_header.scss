@@ -111,6 +111,20 @@ $bordure-champ: rgba(0, 73, 124, 0.15);
   }
 }
 
+@media (min-width: 768px) {
+  .entete {
+    .logo {
+      display: none;
+    }
+
+    .logo-desktop {
+      display: block;
+      width: auto;
+      height: 48px;
+    }
+  }
+}
+
 // --- Desktop : une seule ligne de 96 px.
 @media (min-width: 992px) {
   .entete {
