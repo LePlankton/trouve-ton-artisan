@@ -1,0 +1,26 @@
+.erreur-404 {
+  text-align: center;
+  padding: 24px;
+  margin: 48px 60px 96px;
+
+  img {
+    max-width: 280px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+    color: #00497c;
+  }
+
+  p {
+    color: #384050;
+    font-size: 16px;
+    line-height: 26px;
+  }
+}

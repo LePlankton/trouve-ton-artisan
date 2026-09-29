@@ -20,6 +20,8 @@
 @use 'accueil';
 @use 'liste';
 @use 'fiche';
+@use 'erreur';
+@use 'page-legale';
 
 body {
   display: flex;

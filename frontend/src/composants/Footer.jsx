@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom';
 
+const LIENS_LEGAUX = [
+  { to: '/mentions-legales', label: 'Mentions légales' },
+  { to: '/donnees-personnelles', label: 'Données personnelles' },
+  { to: '/accessibilite', label: 'Accessibilité' },
+  { to: '/cookies', label: 'Cookies' },
+];
+
 function Footer({ categories }) {
   return (
     <footer className="pied">
@@ -23,18 +30,11 @@ function Footer({ categories }) {
             <h2 className="h6">Informations</h2>
             <nav aria-label="Informations">
               <ul className="list-unstyled">
-                <li>
-                  <a href="#">Mentions légales</a>
-                </li>
-                <li>
-                  <a href="#">Données personnelles</a>
-                </li>
-                <li>
-                  <a href="#">Accessibilité</a>
-                </li>
-                <li>
-                  <a href="#">Cookies</a>
-                </li>
+                {LIENS_LEGAUX.map((lien) => (
+                  <li key={lien.to}>
+                    <Link to={lien.to}>{lien.label}</Link>
+                  </li>
+                ))}
               </ul>
             </nav>
           </div>
