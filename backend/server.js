@@ -18,8 +18,8 @@ const app = express();
 // En-têtes HTTP de sécurité
 app.use(helmet());
 
-// Seul le site officiel peut appeler l'API depuis un navigateur
-app.use(cors({ origin: process.env.ORIGINE_AUTORISEE }));
+// Configuration du CORS pour autoriser uniquement les origines spécifiées dans l'environnement
+app.use(cors({ origin: process.env.ORIGINE_AUTORISEE.split(',') }));
 
 // Lecture du corps des requêtes en JSON
 app.use(express.json({ limit: '100kb' }));
@@ -41,7 +41,8 @@ app.use((erreur, req, res, next) => {
   console.error(erreur);
 
   const statut = erreur.status ?? 500;
-  const message = statut < 500 ? 'Requête invalide.' : 'Une erreur est survenue.';
+  const message =
+    statut < 500 ? 'Requête invalide.' : 'Une erreur est survenue.';
 
   res.status(statut).json({ message });
 });
