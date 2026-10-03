@@ -23,11 +23,15 @@ function Header({ categories }) {
           <img
             className="logo"
             src={logoReduit}
+            width="460"
+            height="40"
             alt="Trouve ton artisan, retour à l'accueil"
           />
           <img
             className="logo-desktop"
             src={logoComplet}
+            width="500"
+            height="106"
             alt=""
             aria-hidden="true"
           />
