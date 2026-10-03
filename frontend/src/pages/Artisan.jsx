@@ -47,7 +47,14 @@ function Artisan() {
         <div className="container">
           <div className="row g-4">
             <div className="col-12 col-lg-7">
-              <img className="banniere" src={photoAtelier} alt="" />
+              <img
+                className="banniere"
+                src={photoAtelier}
+                alt="Photo de l'atelier"
+                width="1200"
+                height="675"
+                fetchPriority="high"
+              />
               <h1>{artisan.nom}</h1>
               <Etoiles note={artisan.note} />
               <p className="specialite">{artisan.Specialite.nom}</p>

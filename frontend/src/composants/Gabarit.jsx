@@ -14,9 +14,13 @@ function Gabarit() {
 
   return (
     <>
+      <a className="evitement" href="#contenu">
+        Aller au contenu
+      </a>
+
       <Header categories={categories} />
 
-      <main>
+      <main id="contenu">
         <Outlet context={categories} />
       </main>
 
