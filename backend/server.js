@@ -1,5 +1,7 @@
 // Point d'entrée du serveur Express pour l'API "Trouve ton artisan"
 import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Importation de la connexion à la base de données
 import { sequelize } from './src/config/database.js';
@@ -31,10 +33,20 @@ app.get('/api/sante', (req, res) => {
 app.use('/api/categories', categorieRoutes);
 app.use('/api/artisans', artisanRoutes);
 
-// Route inconnue
-app.use((req, res) => {
+// Route d'API inconnue : on répond en JSON, uniquement sous /api
+app.use('/api', (req, res) => {
   res.status(404).json({ message: 'Ressource introuvable.' });
 });
+
+// Le site React construit, servi par la même application
+const dossierFront = fileURLToPath(
+  new URL('../frontend/dist', import.meta.url),
+);
+
+app.use(express.static(dossierFront));
+
+// Toute autre adresse renvoie l'application : c'est le routeur React qui décide
+app.use((req, res) => res.sendFile(path.join(dossierFront, 'index.html')));
 
 // Gestionnaire d'erreurs : détail dans les logs, message neutre pour le visiteur
 app.use((erreur, req, res, next) => {
