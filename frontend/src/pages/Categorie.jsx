@@ -8,6 +8,7 @@ function Categorie() {
   const { id } = useParams();
   const categories = useOutletContext();
   const categorie = categories.find((c) => String(c.id) === id);
+  const nomCategorie = categorie?.nom ?? 'Catégorie';
 
   const [donnees, setDonnees] = useState({
     id: null,
@@ -37,12 +38,12 @@ function Categorie() {
   return (
     <>
       <Seo
-        titre={`${categorie.nom} — Trouve ton artisan`}
-        description={`Tous les artisans de la catégorie ${categorie.nom} en Auvergne-Rhône-Alpes : coordonnées, spécialité, ville et avis.`}
+        titre={`${nomCategorie} — Trouve ton artisan`}
+        description={`Tous les artisans de la catégorie ${nomCategorie} en Auvergne-Rhône-Alpes : coordonnées, spécialité, ville et avis.`}
       />
       <section className="liste">
         <div className="container">
-          <h1>{categorie ? categorie.nom : 'Catégorie'}</h1>
+          <h1>{nomCategorie}</h1>
 
           {chargement && <p>Chargement…</p>}
           {erreur && <p className="text-danger">{erreur}</p>}
