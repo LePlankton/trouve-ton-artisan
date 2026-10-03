@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getArtisan } from '../services/api.js';
+import Seo from '../composants/Seo.jsx';
 import Etoiles from '../composants/Etoiles.jsx';
 import photoAtelier from '../assets/photo-atelier.jpg';
 import FormulaireContact from '../composants/FormulaireContact.jsx';
@@ -37,40 +38,46 @@ function Artisan() {
   if (erreur) return <p className="container text-danger">{erreur}</p>;
 
   return (
-    <article className="fiche">
-      <div className="container">
-        <div className="row g-4">
-          <div className="col-12 col-lg-7">
-            <img className="banniere" src={photoAtelier} alt="" />
-            <h1>{artisan.nom}</h1>
-            <Etoiles note={artisan.note} />
-            <p className="specialite">{artisan.Specialite.nom}</p>
-            <p className="ville">
-              <img src={iconeLocalisation} alt="" />
-              {artisan.ville}
-            </p>
+    <>
+      <Seo
+        titre={`${artisan.nom} — ${artisan.Specialite.nom} à ${artisan.ville}`}
+        description={`${artisan.nom}, ${artisan.Specialite.nom} à ${artisan.ville}. Contactez cet artisan directement depuis sa fiche.`}
+      />
+      <article className="fiche">
+        <div className="container">
+          <div className="row g-4">
+            <div className="col-12 col-lg-7">
+              <img className="banniere" src={photoAtelier} alt="" />
+              <h1>{artisan.nom}</h1>
+              <Etoiles note={artisan.note} />
+              <p className="specialite">{artisan.Specialite.nom}</p>
+              <p className="ville">
+                <img src={iconeLocalisation} alt="" />
+                {artisan.ville}
+              </p>
 
-            <h2>À propos</h2>
-            <p>{artisan.a_propos}</p>
+              <h2>À propos</h2>
+              <p>{artisan.a_propos}</p>
 
-            {artisan.site_web && (
-              <a
-                className="btn btn-outline-primary"
-                href={artisan.site_web}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Visiter le site web
-              </a>
-            )}
-          </div>
+              {artisan.site_web && (
+                <a
+                  className="btn btn-outline-primary"
+                  href={artisan.site_web}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Visiter le site web
+                </a>
+              )}
+            </div>
 
-          <div className="col-12 col-lg-5">
-            <FormulaireContact artisan={artisan} />
+            <div className="col-12 col-lg-5">
+              <FormulaireContact artisan={artisan} />
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getArtisansDuMois } from '../services/api.js';
 import CarteArtisan from '../composants/CarteArtisan.jsx';
+import Seo from '../composants/Seo.jsx';
 
 const ETAPES = [
   'Choisir la catégorie d’artisanat dans le menu.',
@@ -23,6 +24,10 @@ function Accueil() {
 
   return (
     <>
+      <Seo
+        titre="Trouve ton artisan — Annuaire des artisans d'Auvergne-Rhône-Alpes"
+        description="Trouvez rapidement un artisan près de chez vous parmi les professionnels référencés en Auvergne-Rhône-Alpes : bâtiment, services, fabrication, alimentation."
+      />
       <section className="bandeau">
         <div className="container">
           <h1>Trouvez un artisan près de chez vous</h1>

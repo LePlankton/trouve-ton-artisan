@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useOutletContext } from 'react-router-dom';
 import { getArtisans } from '../services/api.js';
 import CarteArtisan from '../composants/CarteArtisan.jsx';
+import Seo from '../composants/Seo.jsx';
 
 function Categorie() {
   const { id } = useParams();
@@ -34,35 +35,41 @@ function Categorie() {
   const { artisans, erreur } = donnees;
 
   return (
-    <section className="liste">
-      <div className="container">
-        <h1>{categorie ? categorie.nom : 'Catégorie'}</h1>
+    <>
+      <Seo
+        titre={`${categorie.nom} — Trouve ton artisan`}
+        description={`Tous les artisans de la catégorie ${categorie.nom} en Auvergne-Rhône-Alpes : coordonnées, spécialité, ville et avis.`}
+      />
+      <section className="liste">
+        <div className="container">
+          <h1>{categorie ? categorie.nom : 'Catégorie'}</h1>
 
-        {chargement && <p>Chargement…</p>}
-        {erreur && <p className="text-danger">{erreur}</p>}
+          {chargement && <p>Chargement…</p>}
+          {erreur && <p className="text-danger">{erreur}</p>}
 
-        {!chargement && !erreur && (
-          <>
-            <p className="compteur">
-              {artisans.length} artisan{artisans.length > 1 ? 's' : ''} trouvé
-              {artisans.length > 1 ? 's' : ''}
-            </p>
+          {!chargement && !erreur && (
+            <>
+              <p className="compteur">
+                {artisans.length} artisan{artisans.length > 1 ? 's' : ''} trouvé
+                {artisans.length > 1 ? 's' : ''}
+              </p>
 
-            {artisans.length === 0 && (
-              <p>Aucun artisan dans cette catégorie.</p>
-            )}
+              {artisans.length === 0 && (
+                <p>Aucun artisan dans cette catégorie.</p>
+              )}
 
-            <div className="row g-4">
-              {artisans.map((artisan) => (
-                <div className="col-12 col-md-6 col-lg-4" key={artisan.id}>
-                  <CarteArtisan artisan={artisan} />
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+              <div className="row g-4">
+                {artisans.map((artisan) => (
+                  <div className="col-12 col-md-6 col-lg-4" key={artisan.id}>
+                    <CarteArtisan artisan={artisan} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </>
   );
 }
 
