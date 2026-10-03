@@ -15,6 +15,7 @@ export async function listerArtisansDuMois(req, res) {
 // Le détail d'un artisan, pour sa fiche.
 export async function afficherArtisan(req, res) {
   const artisan = await Artisan.findByPk(req.params.id, {
+    attributes: ['id', 'nom', 'note', 'ville', 'a_propos', 'site_web'],
     include: {
       model: Specialite,
       attributes: ['nom'],
@@ -49,7 +50,7 @@ export async function listerArtisans(req, res) {
     attributes: ['id', 'nom', 'note', 'ville'],
     include: {
       model: Specialite,
-      attributes: ['nom'],
+      attributes: ['id', 'nom', 'note', 'ville', 'a_propos', 'site_web'],
       where: filtreSpecialite,
     },
     order: [['nom', 'ASC']],
