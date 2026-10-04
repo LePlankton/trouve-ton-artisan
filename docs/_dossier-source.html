@@ -187,7 +187,7 @@ table.t td:first-child{ color:var(--bleuf); font-weight:600; }
 table.t tr:nth-child(even) td{ background:#f4f9fd; }
 .etape .n{ box-shadow:0 0 0 1.2mm #e3f0fa; }
 .schema{ background:#f8fcff; border-color:#bcdcf3; padding:3mm; }
-.schema img{ max-width:100%; height:auto; display:block; margin:0 auto;
+.schema img{ max-width:100%; max-height:105mm; width:auto; height:auto; display:block; margin:0 auto;
              border:1px solid #bcdcf3; border-radius:2px; }
 .encart{ border-left-width:5px; }
 .encart .titre{ font-size:9.6pt; }
@@ -244,6 +244,17 @@ strong{ color:var(--bleuf); }
 .tag.s{ background:#cd2c2e; }
 .tag.p{ background:#0074c7; }
 .tag.q{ background:#5f8f4f; }
+
+/* modele logique de donnees */
+.mld{
+  font-family:Consolas,'Courier New',monospace; font-size:9.6pt; line-height:2.1;
+  background:#f4f9fd; border:1px solid #bcdcf3; border-left:1.2mm solid #0074c7;
+  border-radius:0 3px 3px 0; padding:3.5mm 4.5mm; margin:0 0 3mm;
+  page-break-inside:avoid;
+}
+.mld b{ color:#00497c; font-weight:700; }
+.mld u{ color:#00497c; }
+.mld .fk{ color:#cd2c2e; font-weight:700; }
 ul.check{ page-break-inside:avoid; }
 ul.check.cols{ column-count:2; column-gap:9mm; }
 ul.check.cols li{ break-inside:avoid; }
@@ -268,6 +279,7 @@ ul.check.cols li{ break-inside:avoid; }
   <p class="accroche">« Une mesure de sécurité qu'on ne sait pas expliquer n'est pas une mesure : c'est une ligne de code recopiée. »</p>
 
   <table class="fiche">
+    <tr><td>La maquette</td><td>https://www.figma.com/design/MToqfig0eCiDNn5rBbgW9b/Trouve-ton-artisan</td></tr>
     <tr><td>Le site</td><td>https://trouvetonartisan.alwaysdata.net</td></tr>
     <tr><td>Le code</td><td>https://github.com/LePlankton/trouve-ton-artisan</td></tr>
     <tr><td>Côté navigateur</td><td>React 19, React Router 7, Vite, Bootstrap 5.3 personnalisé en Sass</td></tr>
@@ -282,27 +294,27 @@ ul.check.cols li{ break-inside:avoid; }
   <p class="chap-intro">Huit parties. Les deux premières posent le contexte, les quatre suivantes forment le cœur du dossier, les deux dernières assument ce qui n'a pas été fait.</p>
 
   <div class="som-item"><span class="som-num">1</span><span class="som-txt">Le projet</span><span class="som-pg">3</span></div>
-  <div class="som-sub">1.1 Le besoin · 1.2 Ce que fait le site · 1.3 Les livrables</div>
+  <div class="som-sub">1.1 Le commanditaire · 1.2 Le besoin · 1.3 Les contraintes · 1.4 Les maquettes · 1.5 Ce que fait le site · 1.6 Les livrables</div>
 
-  <div class="som-item"><span class="som-num">2</span><span class="som-txt">Architecture et choix techniques</span><span class="som-pg">4</span></div>
-  <div class="som-sub">2.1 L'ensemble · 2.2 La base de données · 2.3 Un seul serveur en production · 2.4 L'organisation du code</div>
+  <div class="som-item"><span class="som-num">2</span><span class="som-txt">Architecture et choix techniques</span><span class="som-pg">8</span></div>
+  <div class="som-sub">2.1 L'ensemble · 2.2 Le modèle conceptuel · 2.3 Le modèle logique · 2.4 Les décisions de conception · 2.5 Un seul serveur · 2.6 L'organisation du code</div>
 
-  <div class="som-item"><span class="som-num">3</span><span class="som-txt">La sécurité</span><span class="som-pg">6</span></div>
+  <div class="som-item"><span class="som-num">3</span><span class="som-txt">La sécurité</span><span class="som-pg">11</span></div>
   <div class="som-sub">3.1 Vue d'ensemble · 3.2 La base de données · 3.3 Le serveur · 3.4 Le formulaire de contact · 3.5 Le navigateur · 3.6 La mise en ligne</div>
 
-  <div class="som-item"><span class="som-num">4</span><span class="som-txt">Ma démarche de veille</span><span class="som-pg">11</span></div>
+  <div class="som-item"><span class="som-num">4</span><span class="som-txt">Ma démarche de veille</span><span class="som-pg">16</span></div>
   <div class="som-sub">4.1 Pourquoi · 4.2 Mes sources · 4.3 Mon rythme · 4.4 Garder une trace</div>
 
-  <div class="som-item"><span class="som-num">5</span><span class="som-txt">Ce que la veille a produit</span><span class="som-pg">13</span></div>
+  <div class="som-item"><span class="som-num">5</span><span class="som-txt">Ce que la veille a produit</span><span class="som-pg">18</span></div>
   <div class="som-sub">5.1 Une alerte évaluée, pas appliquée · 5.2 Six failles sur mon propre code · 5.3 Les pannes qui enseignent</div>
 
-  <div class="som-item"><span class="som-num">6</span><span class="som-txt">Qualité et audits</span><span class="som-pg">16</span></div>
+  <div class="som-item"><span class="som-num">6</span><span class="som-txt">Qualité et audits</span><span class="som-pg">21</span></div>
   <div class="som-sub">6.1 La méthode · 6.2 Accessibilité · 6.3 Validation HTML · 6.4 Référencement · 6.5 Performance</div>
 
-  <div class="som-item"><span class="som-num">7</span><span class="som-txt">Limites connues</span><span class="som-pg">20</span></div>
+  <div class="som-item"><span class="som-num">7</span><span class="som-txt">Limites connues</span><span class="som-pg">25</span></div>
   <div class="som-sub">7.1 Ce que je n'ai pas fait, et pourquoi · 7.2 Ce que je ferais ensuite</div>
 
-  <div class="som-item"><span class="som-num">8</span><span class="som-txt">Bilan</span><span class="som-pg">22</span></div>
+  <div class="som-item"><span class="som-num">8</span><span class="som-txt">Bilan</span><span class="som-pg">27</span></div>
   <div class="som-sub">Ce que ce projet m'a appris</div>
 
   <p class="citation">Ce dossier raconte autant ce que j'ai corrigé que ce que j'ai décidé de ne pas corriger. Les deux sont des choix d'ingénierie.</p>
@@ -314,8 +326,12 @@ ul.check.cols li{ break-inside:avoid; }
   <h2>Le projet</h2>
   <p class="chap-intro">Un annuaire régional d'artisans, à construire de la maquette jusqu'à la mise en ligne.</p>
 
-  <h3>1.1 Le besoin</h3>
-  <p>La Région Auvergne-Rhône-Alpes souhaite un site permettant de trouver un artisan près de chez soi et de le contacter directement. Le parcours attendu tient en quatre étapes.</p>
+  <h3>1.1 Le commanditaire</h3>
+  <p>La <strong>Région Auvergne-Rhône-Alpes</strong> est une collectivité territoriale qui regroupe douze départements et compte environ huit millions d'habitants. Parmi ses compétences figure le développement économique local, dont le soutien à l'artisanat : la région recense plusieurs dizaines de milliers d'entreprises artisanales, souvent de très petite taille et peu visibles en ligne.</p>
+  <p>C'est à ce titre qu'elle souhaite mettre à disposition de ses habitants un annuaire public et gratuit. Le commanditaire n'est donc pas un client marchand : le site ne vend rien, ne prend aucune commission, et n'héberge aucun compte utilisateur. <strong>Il met en relation, et s'arrête là.</strong> Cette intention cadre tout le reste — notamment le fait qu'un visiteur n'ait jamais à s'identifier.</p>
+
+  <h3>1.2 L'expression du besoin</h3>
+  <p>Le site doit permettre de trouver un artisan près de chez soi et de le contacter directement. Le parcours attendu tient en quatre étapes.</p>
   <div class="schema">
     <svg viewBox="0 0 620 92" xmlns="http://www.w3.org/2000/svg">
       <g font-family="Segoe UI, sans-serif">
@@ -341,9 +357,49 @@ ul.check.cols li{ break-inside:avoid; }
       </g>
     </svg>
   </div>
-  <p>Le cadre était imposé : une maquette Figma à respecter, un jeu de données fourni, et une pile technique précise — React avec Bootstrap côté navigateur, Node.js avec Express et une base MySQL côté serveur.</p>
+  <p>Trois exigences fonctionnelles complètent ce parcours : une recherche par nom accessible depuis toutes les pages, une mise en avant d'artisans sur l'accueil, et des fiches consultables sans aucune inscription.</p>
 
-  <h3>1.2 Ce que fait le site</h3>
+  <h3>1.3 Les contraintes</h3>
+  <p>Le cadre était imposé. Rien de ce qui suit n'a fait l'objet d'un choix de ma part.</p>
+  <table class="t">
+    <tr><th>Contrainte</th><th>Ce qu'elle implique</th></tr>
+    <tr><td>Maquette fournie en Figma</td><td>respect des couleurs, des espacements et des trois formats — mobile, tablette, bureau</td></tr>
+    <tr><td>Pile technique imposée</td><td>React et Bootstrap côté navigateur, Node.js avec Express et MySQL côté serveur</td></tr>
+    <tr><td>Jeu de données fourni</td><td>les artisans, leurs notes et leurs coordonnées sont livrés tels quels, sans correction</td></tr>
+    <tr><td>Site public, sans compte</td><td>aucune authentification, donc aucune donnée de visiteur stockée</td></tr>
+    <tr><td>Accessibilité et référencement</td><td>le site s'adresse à tous les habitants : les deux sont des exigences, pas des options</td></tr>
+    <tr><td>Hébergement à ma charge</td><td>offre gratuite retenue, avec ses limites — un seul site, espace disque réduit</td></tr>
+  </table>
+  <div class="encart cle">
+    <span class="titre">La contrainte la plus structurante n'était pas technique</span>
+    <p>L'absence de compte utilisateur supprime d'un coup toute une famille de risques : pas de mots de passe à stocker, pas de sessions à protéger, pas de vol d'identité possible. En contrepartie, elle concentre toute la surface d'attaque sur <strong>un seul point d'entrée</strong> : le formulaire de contact. C'est pourquoi il porte à lui seul quatre des dix-huit mesures de sécurité.</p>
+  </div>
+
+  <h3>1.4 Les maquettes</h3>
+  <p>La maquette a été réalisée sous Figma, en <strong>trois formats par écran</strong> : mobile, tablette et bureau. Chaque page du site possède donc ses trois planches, dessinées avant la moindre ligne de code.</p>
+  <div class="mesure">
+    <span class="titre">Fichier complet</span>
+    <p>https://www.figma.com/design/MToqfig0eCiDNn5rBbgW9b/Trouve-ton-artisan</p>
+  </div>
+
+  <div class="schema"><img src="captures/maquette-accueil-planches.png" alt="Maquettes de la page d'accueil en mobile, bureau et tablette"></div>
+  <p class="legende">La page d'accueil dans ses trois formats. Le parcours en quatre étapes passe d'une colonne verticale sur mobile à une frise horizontale sur bureau.</p>
+
+  <div class="schema"><img src="captures/maquette-liste-artisans-planches.png" alt="Maquettes de la liste des artisans d'une catégorie"></div>
+  <p class="legende">La liste des artisans d'une catégorie : une carte par artisan, de une à trois colonnes selon la largeur disponible.</p>
+
+  <div class="schema"><img src="captures/maquette-fiche-artisan-planches.png" alt="Maquettes de la fiche artisan et de son formulaire de contact"></div>
+  <p class="legende">La fiche artisan et son formulaire de contact, la page la plus riche du site.</p>
+
+  <div class="schema"><img src="captures/maquette-404-et-legales-planches.png" alt="Maquettes de la page 404 et des pages légales"></div>
+  <p class="legende">La page d'erreur et le gabarit commun aux quatre pages légales.</p>
+
+  <div class="encart cle">
+    <span class="titre">La maquette a été corrigée en cours de projet</span>
+    <p>L'audit d'accessibilité a révélé un rapport de contraste de 1,7:1 sur les textes d'invite des champs, là où la norme en demande 4,5. La couleur venait directement du système de design Figma. <strong>J'ai corrigé les deux</strong> — le code et la maquette : deux livrables qui se contredisent sont deux livrables faux.</p>
+  </div>
+
+  <h3>1.5 Ce que fait le site</h3>
   <table class="t">
     <tr><th>Page</th><th>Rôle</th></tr>
     <tr><td>Accueil</td><td>le parcours en quatre étapes, et les artisans mis en avant</td></tr>
@@ -353,7 +409,7 @@ ul.check.cols li{ break-inside:avoid; }
     <tr><td>Pages légales et 404</td><td>mentions, accessibilité, données personnelles, cookies, et toute adresse inconnue</td></tr>
   </table>
 
-  <h3>1.3 Les livrables</h3>
+  <h3>1.6 Les livrables</h3>
   <ul class="check cols">
     <li>La maquette Figma : mobile, tablette, bureau</li>
     <li>Le code source, sur un dépôt public</li>
@@ -405,8 +461,78 @@ ul.check.cols li{ break-inside:avoid; }
   <p class="legende">Le navigateur ne parle jamais à la base : il passe par l'API, qui seule détient les identifiants.</p>
   <p>Cette séparation n'est pas une formalité d'architecture, c'est une mesure de sécurité. Les identifiants de la base ne quittent jamais le serveur, et l'API décide de ce qu'elle expose — ce qui, on le verra, demande d'être explicite.</p>
 
-  <h3>2.2 La base de données</h3>
-  <p>Trois tables : <code>categorie</code>, <code>specialite</code>, <code>artisan</code>. Un artisan appartient à une spécialité, une spécialité appartient à une catégorie. Quatre décisions méritent une explication.</p>
+  <h3>2.2 Le modèle conceptuel</h3>
+  <p>Deux règles de gestion, tirées du cahier des charges, suffisent à décrire le domaine : <strong>un artisan exerce une seule spécialité</strong>, et <strong>une spécialité appartient à une seule catégorie</strong>. D'où trois entités et deux relations.</p>
+  <div class="schema">
+    <svg viewBox="0 0 620 230" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="Segoe UI, sans-serif">
+        <!-- CATEGORIE -->
+        <rect x="8" y="78" width="118" height="74" rx="3" fill="#fff" stroke="#00497c" stroke-width="1.4"/>
+        <rect x="8" y="78" width="118" height="20" rx="3" fill="#00497c"/>
+        <text x="67" y="92" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">CATEGORIE</text>
+        <text x="16" y="114" fill="#00497c" font-size="9.5" font-weight="700" text-decoration="underline">id</text>
+        <text x="16" y="132" fill="#384050" font-size="9.5">nom</text>
+
+        <!-- relation 1 -->
+        <path d="M126 115 L 170 115" stroke="#0074c7" stroke-width="1.3"/>
+        <polygon points="205,100 240,115 205,130 170,115" fill="#eaf4fb" stroke="#0074c7" stroke-width="1.3"/>
+        <text x="205" y="118" fill="#00497c" font-size="8.6" font-weight="600" text-anchor="middle">regroupe</text>
+        <path d="M240 115 L 282 115" stroke="#0074c7" stroke-width="1.3"/>
+        <text x="148" y="108" fill="#5f6a79" font-size="8.4" text-anchor="middle">1,n</text>
+        <text x="261" y="108" fill="#5f6a79" font-size="8.4" text-anchor="middle">1,1</text>
+
+        <!-- SPECIALITE -->
+        <rect x="282" y="78" width="118" height="74" rx="3" fill="#fff" stroke="#00497c" stroke-width="1.4"/>
+        <rect x="282" y="78" width="118" height="20" rx="3" fill="#00497c"/>
+        <text x="341" y="92" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">SPECIALITE</text>
+        <text x="290" y="114" fill="#00497c" font-size="9.5" font-weight="700" text-decoration="underline">id</text>
+        <text x="290" y="132" fill="#384050" font-size="9.5">nom</text>
+
+        <!-- relation 2 -->
+        <path d="M400 115 L 420 115" stroke="#0074c7" stroke-width="1.3"/>
+        <polygon points="449,100 478,115 449,130 420,115" fill="#eaf4fb" stroke="#0074c7" stroke-width="1.3"/>
+        <text x="449" y="118" fill="#00497c" font-size="8.6" font-weight="600" text-anchor="middle">exerce</text>
+        <path d="M478 115 L 496 115" stroke="#0074c7" stroke-width="1.3"/>
+        <text x="410" y="108" fill="#5f6a79" font-size="8.4" text-anchor="middle">0,n</text>
+        <text x="487" y="108" fill="#5f6a79" font-size="8.4" text-anchor="middle">1,1</text>
+
+        <!-- ARTISAN -->
+        <rect x="496" y="24" width="116" height="182" rx="3" fill="#fff" stroke="#00497c" stroke-width="1.4"/>
+        <rect x="496" y="24" width="116" height="20" rx="3" fill="#00497c"/>
+        <text x="554" y="38" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">ARTISAN</text>
+        <text x="504" y="60" fill="#00497c" font-size="9.5" font-weight="700" text-decoration="underline">id</text>
+        <text x="504" y="78" fill="#384050" font-size="9.5">nom</text>
+        <text x="504" y="96" fill="#384050" font-size="9.5">note</text>
+        <text x="504" y="114" fill="#384050" font-size="9.5">ville</text>
+        <text x="504" y="132" fill="#384050" font-size="9.5">a_propos</text>
+        <text x="504" y="150" fill="#384050" font-size="9.5">email</text>
+        <text x="504" y="168" fill="#384050" font-size="9.5">site_web</text>
+        <text x="504" y="186" fill="#384050" font-size="9.5">top</text>
+      </g>
+    </svg>
+  </div>
+  <p class="legende">Modèle conceptuel. Les cardinalités se lisent de part et d'autre de chaque relation : une catégorie regroupe une ou plusieurs spécialités, une spécialité appartient à une seule catégorie.</p>
+  <p>Le point à remarquer est la <strong>chaîne</strong> : il n'existe aucune relation directe entre un artisan et une catégorie. Pour savoir qu'un chocolatier relève de l'alimentation, on passe nécessairement par sa spécialité.</p>
+
+  <h3>2.3 Le modèle logique</h3>
+  <p>La traduction est mécanique : chaque entité devient une table, et chaque relation « un à plusieurs » devient une clé étrangère placée <strong>du côté qui porte le « 1 »</strong>.</p>
+  <div class="mld">
+    <b>categorie</b> (<u>id</u>, nom)<br>
+    <b>specialite</b> (<u>id</u>, nom, <span class="fk">#id_categorie</span>)<br>
+    <b>artisan</b> (<u>id</u>, nom, note, ville, a_propos, email, site_web, top, <span class="fk">#id_specialite</span>)
+  </div>
+  <p class="legende">Clé primaire soulignée, clé étrangère précédée d'un dièse.</p>
+  <table class="t">
+    <tr><th>Colonne</th><th>Type retenu</th><th>Pourquoi</th></tr>
+    <tr><td><code>note</code></td><td><code>DECIMAL(2,1)</code></td><td>valeur exacte, affichable et comparable sans approximation</td></tr>
+    <tr><td><code>top</code></td><td><code>BOOLEAN</code></td><td>désigne les artisans mis en avant sur l'accueil</td></tr>
+    <tr><td><code>a_propos</code></td><td><code>TEXT</code></td><td>longueur libre, contrairement aux autres champs</td></tr>
+    <tr><td><code>site_web</code></td><td>nullable</td><td>le cahier des charges précise « le cas échéant » : 7 artisans sur 17 n'en ont pas</td></tr>
+    <tr><td>clés étrangères</td><td><code>InnoDB</code></td><td>seul moteur qui applique réellement les contraintes ; MyISAM accepte la syntaxe et l'ignore</td></tr>
+  </table>
+
+  <h3>2.4 Les décisions de conception</h3>
+  <p>Quatre choix méritent une explication.</p>
   <table class="t">
     <tr><th>Décision</th><th>Pourquoi</th></tr>
     <tr><td>Aucune clé étrangère directe entre <code>artisan</code> et <code>categorie</code></td><td>la catégorie se déduit de la spécialité ; deux chemins vers la même information finiraient par se contredire</td></tr>
@@ -415,7 +541,7 @@ ul.check.cols li{ break-inside:avoid; }
     <tr><td>Noms de tables en minuscules</td><td>sous Linux, la casse compte ; ce choix fait en développement a évité une panne en production</td></tr>
   </table>
 
-  <h3>2.3 Un seul serveur en production</h3>
+  <h3>2.5 Un seul serveur en production</h3>
   <p>En développement, deux serveurs tournent : l'API sur un port, le site sur un autre. En production, l'offre d'hébergement retenue n'autorise qu'un seul site. L'API sert donc aussi les fichiers construits du front.</p>
   <div class="encart bonne">
     <span class="titre">Une contrainte devenue un avantage</span>
@@ -423,7 +549,7 @@ ul.check.cols li{ break-inside:avoid; }
   </div>
   <p>Une règle d'ordre devient alors critique : les routes de l'API doivent être déclarées <strong>avant</strong> celle qui renvoie la page du site pour toute adresse inconnue. Dans l'autre sens, les appels de données recevraient du HTML.</p>
 
-  <h3>2.4 L'organisation du code</h3>
+  <h3>2.6 L'organisation du code</h3>
   <p>Côté serveur, quatre dossiers qui séparent les responsabilités : <code>config</code> pour les connexions, <code>models</code> pour les tables, <code>controllers</code> pour la logique, <code>routes</code> pour les adresses. Côté navigateur, les pages d'un côté, les composants réutilisables de l'autre, et <strong>tous les appels à l'API regroupés dans un seul fichier</strong>.</p>
   <p>Ce dernier point a servi plus tard : changer l'adresse de l'API entre développement et production n'a demandé de toucher qu'un endroit.</p>
 </section>
