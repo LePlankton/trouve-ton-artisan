@@ -12,7 +12,7 @@ Brouillon de travail pour le dossier. J'écris au fil du projet, je mettrai au p
 
 **Sequelize partout, donc pas d'injection SQL.** C'est le point que je trouve le plus important. La barre de recherche envoie du texte libre au serveur. Si je construisais ma requête en collant ce texte dedans, quelqu'un pourrait y glisser du SQL et faire exécuter ce qu'il veut. Avec Sequelize, la valeur est envoyée à part de la requête : MySQL sait que c'est une donnée, pas une instruction.
 
-**Je n'envoie que les colonnes utiles.** Sur la page d'accueil et les listes, l'API renvoie le nom, la note, la ville et la spécialité. Les e-mails et les textes de présentation ne sortent que sur la fiche d'un artisan. C'est plus léger, et surtout je n'expose pas des données dont la page n'a pas besoin.
+**Je n'envoie que les colonnes utiles, et je l'ai appliqué partout — après coup.** Sur les listes, l'API ne renvoie que le nom, la note, la ville et la spécialité. J'avais oublié la fiche détaillée : elle faisait un `findByPk` sans liste de colonnes, donc Sequelize renvoyait **toute** la ligne, e-mail de l'artisan compris, sur une route publique. Mon front n'affichait jamais cette adresse, elle sortait quand même. Corrigé en ajoutant la liste explicite. La leçon vaut plus que le correctif : **on énumère ce qu'on expose, on ne retranche pas ce qu'on cache.** Sans liste blanche, toute colonne ajoutée plus tard à la table sortirait automatiquement dans l'API, sans que personne ne s'en aperçoive.
 
 **Je vérifie tout ce qui arrive, côté serveur.** Le formulaire de contact refuse une requête à qui il manque un champ (400), et une fiche demandée pour un artisan inexistant renvoie 404. React validera aussi le formulaire, mais ça ne compte pas comme une sécurité : on peut appeler mon API directement, sans passer par ma page. Tant que le serveur n'a pas vérifié, je considère que la donnée est suspecte.
 
@@ -26,11 +26,11 @@ Brouillon de travail pour le dossier. J'écris au fil du projet, je mettrai au p
 
 **Helmet pose les en-têtes de sécurité**, et supprime au passage `X-Powered-By: Express`, qui annonçait ma technologie à qui voulait la lire. J'en retiens surtout trois : `nosniff` empêche le navigateur de deviner le type d'un fichier, `X-Frame-Options` interdit d'afficher mon site dans une iframe, `Strict-Transport-Security` impose le HTTPS pour les visites suivantes.
 
-**CORS n'autorise qu'une seule origine**, celle de mon site, lue dans une variable d'environnement. Attention à ne pas raconter n'importe quoi là-dessus : CORS **ne protège pas l'API** — un script ou un `curl` ignorent complètement ces en-têtes et obtiennent mes données. Ce qu'il empêche, c'est qu'un site malveillant utilise le navigateur d'un de mes visiteurs pour interroger mon API en son nom.
+**CORS n'autorise qu'une liste d'origines**, lue dans une variable d'environnement. Attention à ne pas raconter n'importe quoi là-dessus : CORS **ne protège pas l'API** — un script ou un `curl` ignorent complètement ces en-têtes et obtiennent mes données. Ce qu'il empêche, c'est qu'un site malveillant utilise le navigateur d'un de mes visiteurs pour interroger mon API en son nom.
 
 **Le formulaire de contact est limité à 5 envois par quart d'heure et par adresse IP.** Sans ça, un robot pourrait le marteler : l'artisan recevrait des centaines de messages et mon compte d'envoi serait bloqué pour abus. La limite ne s'applique qu'à cette route : consulter le catalogue reste libre. Je connais ses limites : le compteur vit en mémoire, il repart à zéro au redémarrage du serveur.
 
-**Mes erreurs ne racontent plus rien.** Un gestionnaire unique journalise le détail côté serveur et ne renvoie au visiteur qu'un message neutre. Il reprend le code porté par l'erreur quand il y en a un (413 pour un corps trop gros, 400 pour du JSON invalide) et retombe sur 500 sinon. Une route inconnue répond 404 en JSON, jamais une page HTML.
+**Mes erreurs ne racontent plus rien.** Un gestionnaire unique journalise le détail côté serveur et ne renvoie au visiteur qu'un message neutre. Il reprend le code porté par l'erreur quand il y en a un (413 pour un corps trop gros, 400 pour du JSON invalide) et retombe sur 500 sinon. Une route inconnue sous `/api` répond 404 en JSON, jamais une page HTML.
 
 **La validation va plus loin que « le champ est rempli »** : longueur maximale du nom, de l'objet et du message, et rejet d'une adresse e-mail sans `@`. Je ne cherche pas à valider parfaitement une adresse avec une expression régulière — celles qu'on trouve en ligne rejettent souvent des adresses correctes. J'écarte l'absurde, l'envoi réel tranche le reste.
 
@@ -40,7 +40,7 @@ Brouillon de travail pour le dossier. J'écris au fil du projet, je mettrai au p
 
 **React échappe le texte par défaut.** Quand j'affiche `{artisan.nom}`, le contenu est inséré comme du texte, jamais interprété comme du HTML : si un nom contenait `<script>`, il s'afficherait tel quel. C'est une protection intégrée contre le XSS. Elle ne saute que si on utilise `dangerouslySetInnerHTML` — le nom est assez explicite, je ne m'en sers pas.
 
-**`rel="noreferrer"` sur le lien vers le site de l'artisan.** Avec `target="_blank"`, la page ouverte peut sinon accéder à la mienne par `window.opener` et la rediriger vers une fausse page — on appelle ça le *tabnabbing*.
+**`rel="noreferrer"` sur le lien vers le site de l'artisan**, parce qu'il s'ouvre dans un nouvel onglet. Sans lui, la page ouverte peut accéder à la mienne par `window.opener` et la remplacer par une copie — c'est ce qu'on appelle le *tabnabbing*.
 
 **Le bouton d'envoi se désactive pendant la requête.** Ça évite le double clic, donc le double e-mail — et deux appels comptés par la limitation de débit au lieu d'un.
 
@@ -48,16 +48,32 @@ Brouillon de travail pour le dossier. J'écris au fil du projet, je mettrai au p
 
 **Un lien « Aller au contenu » en tête de page.** Il est invisible tant qu'on n'arrive pas dessus au clavier. Sans lui, quelqu'un qui navigue avec Tab doit traverser le logo, les quatre catégories et la recherche **sur chaque page** avant d'atteindre le texte. C'est le genre de détail qu'on ne voit jamais à la souris.
 
-**Un `rel="noreferrer"` sur le lien vers le site de l'artisan**, parce qu'il s'ouvre dans un nouvel onglet. Sans lui, la page ouverte peut remplacer la mienne par une copie — c'est ce qu'on appelle le tabnabbing.
+## Côté mise en ligne
 
-## Ce qu'il me reste à faire
+**Un mot de passe de production différent de celui de mon poste.** Même base, même schéma, mais deux secrets distincts. Si l'un fuite, l'autre tient. Même raisonnement pour la boîte e-mail d'envoi : son mot de passe n'est ni celui de mon compte chez l'hébergeur, ni celui de la base.
 
-- Pour la mise en ligne : un mot de passe de base de données différent de celui de mon poste, et HTTPS.
-- Remplacer le serveur SMTP de test par un vrai fournisseur, avec ses identifiants en variables d'environnement.
-- Vérifier qu'aucune trace de débogage ne subsiste (journalisation des liens d'aperçu Ethereal, par exemple).
-- Réduire le décalage de mise en page sur la fiche artisan : aujourd'hui j'affiche « Chargement… » puis toute la fiche d'un coup, et Lighthouse mesure 0,729 de CLS. Il faudrait garder la structure pendant le chargement au lieu de la remplacer.
-- Héberger la police Inter chez moi plutôt que chez Google : ça supprime une requête bloquante, et ça évite d'envoyer l'adresse IP de mes visiteurs à un tiers (point RGPD).
-- N'importer que les modules Bootstrap que j'utilise : Lighthouse signale 30 Ko de CSS jamais appliqué. À faire en dernier, parce qu'un module retiré par erreur casse des styles sans aucun message.
+**Les secrets ne sont nulle part dans le dépôt.** En production ils sont saisis dans les variables d'environnement du site, chez l'hébergeur. Le dépôt ne transporte que `.env.example`, c'est-à-dire la liste des clés — la documentation, pas les valeurs.
+
+**HTTPS actif**, avec redirection automatique depuis l'adresse non sécurisée.
+
+**J'ai neutralisé les adresses du jeu de données dans la base hébergée.** Les e-mails du brief (`...@gmail.com`, `...@hotmail.com`) sont inventés, mais ils ressemblent à de vraies adresses chez de vrais fournisseurs. Tant que le site tournait sur ma machine, aucune conséquence. En ligne, mon formulaire pouvait réellement écrire à ces gens — et n'importe quel visiteur pouvait le déclencher. J'ai donc redirigé toutes les adresses vers ma propre boîte, **uniquement dans la base hébergée** : mon `seed.sql` livrable garde les données imposées. La démonstration reste complète, personne n'est importuné. C'est la version simple de ce qu'on appelle l'anonymisation d'un jeu de test.
+
+**Le moindre privilège, vérifié en conditions réelles.** En voulant lancer cette modification depuis phpMyAdmin, j'ai été refusé : `#1142 - UPDATE command denied to user 'trouvetonartisan_tta_api'`. J'étais connecté avec le compte de l'application, qui n'a que le `SELECT`. C'est exactement ce que j'avais configuré, mais le voir se déclencher sur le serveur réel vaut mieux qu'une capture faite chez moi. Je n'ai pas élargi ses droits pour autant : j'ai changé d'identité le temps de l'opération. **On ne démonte pas une protection pour une tâche d'administration ponctuelle.**
+
+## Ce que j'ai fini par faire, et ce qui reste
+
+Fait depuis la première version de ces notes :
+
+- mot de passe de base distinct en production, et HTTPS ;
+- vrai serveur SMTP à la place d'Ethereal, identifiants en variables d'environnement ;
+- décalage de mise en page corrigé sur l'accueil : **0,729 → 0,038** après avoir réservé la place des logos ;
+- police Inter hébergée avec le site : plus aucune requête vers un domaine externe.
+
+Ce qui reste, et que j'assume :
+
+- **Bootstrap est importé en entier.** Lighthouse mesure environ 217 Ko de CSS inutilisé, qui bloquent le premier affichage pendant 2,2 s. La bonne correction est de n'importer que les modules employés. Je ne l'ai pas faite : un module retiré par erreur casse des styles sans aucun message, et je n'avais plus le temps de revérifier chaque page avant le rendu. C'est un arbitrage, pas un oubli.
+- **La fiche artisan affiche « Chargement… » puis toute la page d'un coup.** Ça provoque un décalage et empêche le navigateur de repérer l'image principale à l'avance. Il faudrait afficher la structure tout de suite et n'attendre que les textes. Même raison de report : c'est la page qui porte le formulaire de contact, je ne voulais pas y toucher à deux jours du rendu.
+- Relire une dernière fois qu'aucune trace de débogage ne subsiste.
 
 ## Comment je fais ma veille
 
@@ -92,7 +108,7 @@ Ma façon de procéder est toujours la même : je regarde ce qui est sorti, je g
 
 **Une photo de 585 Ko.** L'image d'illustration de la fiche artisan pesait presque 600 Ko à l'export. Compressée, elle est passée à 73 Ko sans différence visible. Les images sont le premier poste de lenteur d'un site, et c'est le genre de point que Lighthouse sanctionne. J'ai aussi vérifié que l'image était libre de droits avant de la publier.
 
-**Le choix d'Ethereal pour les tests.** Les adresses du jeu d'essai sont inventées, mais certaines existent peut-être chez de vraies personnes. Envoyer réellement mes e-mails de test, ce serait leur envoyer du spam. Un serveur SMTP de test qui intercepte tout est donc la bonne solution, et pas seulement la plus simple.
+**Le choix d'Ethereal pour les tests.** Les adresses du jeu d'essai sont inventées, mais certaines existent peut-être chez de vraies personnes. Envoyer réellement mes e-mails de test, ce serait leur envoyer du spam. Un serveur SMTP de test qui intercepte tout est donc la bonne solution, et pas seulement la plus simple. Au moment de passer en production, le problème s'est reposé autrement : il fallait de vrais envois pour la démonstration. J'ai résolu les deux en neutralisant les adresses dans la base hébergée.
 
 **Des textes d'invite illisibles, et le coupable était ma maquette.** Lighthouse m'a mis 96 en accessibilité à cause d'un seul point : le contraste. En mesurant, je suis tombé sur 1,7:1 pour le gris des `placeholder`, alors que la norme en demande 4,5. La couleur venait directement de mon design system Figma, où je l'avais choisie « pour que ça ne gêne pas ». C'est justement le problème : un texte d'invite porte une information, il doit se lire. Je suis passé à `#616b7a` (5,4:1) et j'ai corrigé Figma aussi, sinon mes deux livrables se contredisaient.
 
@@ -104,9 +120,18 @@ Ma façon de procéder est toujours la même : je regarde ce qui est sorti, je g
 
 **Des images onze fois trop grandes.** Mon logo faisait 1401 px de large pour un affichage à 127. Lighthouse le signale sous « Improve image delivery ». J'ai réexporté depuis Figma en fixant la largeur (`460w` au lieu d'un multiplicateur), et refait pareil pour la photo. La règle que j'applique maintenant : exporter au **double** de la taille d'affichage, pour les écrans haute densité, et pas plus.
 
+**Une page blanche que je n'avais jamais vue en développement.** Une fois en ligne, `/categorie/2` ne s'affichait plus : écran vide, et dans la console « Cannot read properties of undefined ». L'API répondait pourtant correctement. L'explication : les catégories sont chargées par le gabarit, et pendant ce temps ma page cherchait la sienne dans un tableau encore vide. Je n'avais jamais vu le bug parce que j'arrivais toujours sur cette page **en cliquant dans le menu**, donc après le chargement. Un visiteur qui colle l'adresse ou arrive depuis un favori, lui, démarre de zéro. J'avais protégé l'affichage du titre, mais pas la métadonnée juste au-dessus — et une seule lecture non protégée suffit à faire tomber toute la page. Depuis, je teste chaque type d'adresse **en la collant directement** dans la barre du navigateur.
+
+**Linux ne pardonne pas les majuscules.** Ma requête sur la table `Artisan` a échoué en ligne avec « doesn't exist », alors que la table est bien là. Sur le serveur d'Alwaysdata, les noms de tables sont sensibles à la casse, contrairement à mon MySQL sous Windows. Mes modèles Sequelize portaient déjà `tableName: 'artisan'` en minuscules, c'est ce qui a sauvé l'application — la requête que j'avais écrite à la main, elle, est passée à la trappe. Le vrai « ça marche chez moi ».
+
+**Un correctif qui ne corrigeait rien.** J'ai perdu une demi-heure à chercher pourquoi une correction du front restait sans effet en ligne. Elle était bien faite, bien construite, bien envoyée — mais j'avais lancé le `scp` **depuis la session SSH**, donc il cherchait les fichiers sur le serveur au lieu de ma machine. La commande n'a signalé aucune erreur. Depuis, je vérifie l'empreinte du fichier servi (`index-XXXX.js`) avant de conclure quoi que ce soit : si elle n'a pas changé, c'est que rien n'est arrivé.
+
+**Mon formulaire coûte deux points de spam, et c'est voulu.** En relisant les en-têtes du premier vrai message reçu, j'ai trouvé le détail du calcul anti-spam : `2.00 FREEMAIL_REPLYTO_NEQ_FROM`. Le filtre pénalise le fait d'avoir une adresse de réponse chez un fournisseur grand public, différente de l'expéditeur — c'est-à-dire exactement le motif que j'ai mis en place pour ne pas usurper. Deux points sur un seuil de cinq, ça passe largement. Mais ça m'a appris quelque chose : **aucune mesure de sécurité n'est gratuite**, et savoir nommer ce qu'elle coûte vaut mieux que de réciter qu'elle est bonne.
+
 ## Choix techniques à justifier dans le dossier
 
 - J'ai gardé le jeu de données du brief tel quel, sans corriger les noms ni les adresses.
 - Pas de clé étrangère entre `artisan` et `categorie` : on passe par la spécialité. Une seule source de vérité, donc pas de risque d'incohérence.
 - `DECIMAL(2,1)` pour la note, pas `FLOAT` : une valeur exacte, sans approximation.
 - `utf8mb4_unicode_ci` pour la base : les accents s'affichent correctement, et la recherche trouve « Labbé » quand on tape « labbe ».
+- Un seul serveur en production : l'offre gratuite n'autorise qu'un site, donc Express sert aussi les fichiers construits du front. Effet de bord appréciable : plus de question d'origines croisées, puisqu'il n'y a plus qu'une seule origine.
