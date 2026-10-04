@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Trouve ton artisan — Dossier de projet</title>
+<style>
+:root{
+  --bleu:#0074c7; --bleuf:#00497c; --ardoise:#384050;
+  --rouge:#cd2c2e; --vert:#82b864; --clair:#f1f8fc;
+  --gris:#7a8494; --bord:#d9e2ea;
+}
+*{box-sizing:border-box;}
+@page{ size:A4; margin:17mm 15mm 18mm 15mm; }
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ardoise); font-size:10.6pt; line-height:1.68;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+
+/* ---------- couverture ---------- */
+.couv{ page-break-after:always; padding-top:6mm; }
+.couv .bandeau{
+  background:var(--bleuf); color:#fff; padding:24mm 14mm 20mm 14mm;
+  border-radius:3px; margin-bottom:14mm;
+}
+.couv .surtitre{
+  font-size:9pt; letter-spacing:.22em; text-transform:uppercase;
+  color:#8fc4ea; margin-bottom:7mm;
+}
+.couv h1{ font-size:34pt; margin:0 0 5mm 0; line-height:1.06; font-weight:700; letter-spacing:-.8px;}
+.couv .st{ font-size:14pt; color:#bcdcf3; font-weight:400; margin:0; }
+.couv .accroche{
+  border-left:4px solid var(--bleu); padding:2mm 0 2mm 6mm;
+  font-size:12.5pt; font-style:italic; color:var(--bleuf); margin-bottom:12mm;
+}
+.fiche{ width:100%; border-collapse:collapse; font-size:10pt; }
+.fiche td{ padding:2.8mm 0; border-bottom:1px solid var(--bord); }
+.fiche td:first-child{ color:var(--gris); width:40mm; text-transform:uppercase; font-size:8pt; letter-spacing:.09em; }
+
+/* ---------- sommaire ---------- */
+.sommaire{ page-break-after:always; }
+.som-item{ display:flex; align-items:baseline; padding:2.6mm 0; border-bottom:1px dotted var(--bord); }
+.som-num{ color:var(--bleu); font-weight:700; width:14mm; flex-shrink:0; }
+.som-txt{ font-weight:600; }
+.som-sub{ padding:1.2mm 0 1.2mm 14mm; font-size:9.2pt; color:var(--gris); }
+
+/* ---------- structure ---------- */
+.chapitre{ page-break-before:always; }
+h2{
+  font-size:20pt; color:var(--bleuf); margin:0 0 2mm 0; line-height:1.2;
+  page-break-after:avoid; letter-spacing:-.4px;
+}
+.chap-num{
+  display:inline-block; background:var(--bleu); color:#fff;
+  font-size:8.4pt; font-weight:700; letter-spacing:.13em;
+  padding:1.4mm 3.4mm; border-radius:2px; margin-bottom:4mm;
+  text-transform:uppercase;
+}
+.chap-intro{
+  font-size:11pt; color:var(--gris); margin:0 0 8mm 0;
+  padding-bottom:5mm; border-bottom:2px solid var(--clair);
+}
+h3{
+  font-size:12.6pt; color:var(--bleuf); margin:8mm 0 2.5mm 0;
+  page-break-after:avoid; font-weight:600;
+}
+h4{ font-size:10.8pt; color:var(--ardoise); margin:5.5mm 0 1.5mm 0; page-break-after:avoid; }
+p{ margin:0 0 3.4mm 0; }
+ul,ol{ margin:0 0 3.6mm 0; padding-left:6mm; }
+li{ margin-bottom:1.8mm; }
+strong{ color:var(--bleuf); }
+code{
+  font-family:"Cascadia Mono",Consolas,"Courier New",monospace;
+  background:var(--clair); color:var(--bleuf);
+  padding:.5mm 1.4mm; border-radius:2px; font-size:9.2pt;
+  border:1px solid #dceaf5;
+}
+
+pre{
+  background:#1f2733; color:#e6edf3; padding:4.5mm 5mm;
+  border-radius:3px; font-family:"Cascadia Mono",Consolas,monospace;
+  font-size:9pt; line-height:1.6;
+  white-space:pre-wrap; word-wrap:break-word;
+  page-break-inside:avoid; margin:0 0 4mm 0;
+  border-left:3px solid var(--bleu);
+}
+pre .c{ color:#8b9bb0; font-style:italic; }
+pre .k{ color:#7cc4f5; }
+pre .s{ color:#a5d6a7; }
+pre .e{ color:#f28b82; }
+.legende{
+  font-size:8.6pt; color:var(--gris); margin:-2.5mm 0 4.5mm 0;
+  padding-left:1mm; font-style:italic;
+}
+
+/* ---------- encarts ---------- */
+.encart{
+  padding:4mm 5mm; border-radius:3px; margin:0 0 4.5mm 0;
+  page-break-inside:avoid; border-left:4px solid;
+  font-size:10pt;
+}
+.encart .titre{
+  font-weight:700; font-size:9.4pt; text-transform:uppercase;
+  letter-spacing:.09em; margin-bottom:2mm; display:block;
+}
+.encart p:last-child{ margin-bottom:0; }
+.info{ background:var(--clair); border-color:var(--bleu); }
+.info .titre{ color:var(--bleu); }
+.danger{ background:#fdf1f1; border-color:var(--rouge); }
+.danger .titre{ color:var(--rouge); }
+.bonne{ background:#f2f8ee; border-color:var(--vert); }
+.bonne .titre{ color:#5a8f3d; }
+.cle{ background:#fff8e8; border-color:#e0a838; }
+.cle .titre{ color:#a8720c; }
+.clair-box{
+  background:#f7f9fb; border-left:4px solid var(--gris);
+  padding:3.4mm 5mm; border-radius:3px; margin:0 0 4.5mm 0;
+  font-size:10pt; page-break-inside:avoid;
+}
+.clair-box .titre{
+  font-weight:700; font-size:8.8pt; text-transform:uppercase;
+  letter-spacing:.11em; color:var(--gris); margin-bottom:1.6mm; display:block;
+}
+.clair-box p:last-child{ margin-bottom:0; }
+
+/* ---------- tableaux ---------- */
+table.t{
+  width:100%; border-collapse:collapse; font-size:9.6pt;
+  margin:0 0 4.5mm 0; page-break-inside:avoid;
+}
+table.t th{
+  background:var(--bleuf); color:#fff; text-align:left;
+  padding:2.4mm 3mm; font-size:8.6pt; text-transform:uppercase; letter-spacing:.07em;
+}
+table.t td{ padding:2.5mm 3mm; border-bottom:1px solid var(--bord); vertical-align:top; }
+table.t tr:nth-child(even) td{ background:#fafcfe; }
+.ok{ color:#4a8a2c; font-weight:700; }
+.ko{ color:var(--rouge); font-weight:700; }
+
+/* ---------- etapes ---------- */
+.etape{ display:flex; gap:4mm; margin-bottom:4mm; page-break-inside:avoid; }
+.etape .n{
+  flex-shrink:0; width:8mm; height:8mm; border-radius:50%;
+  background:var(--bleu); color:#fff; font-weight:700; font-size:10pt;
+  display:flex; align-items:center; justify-content:center;
+}
+.etape .corps{ flex:1; }
+.etape .corps p{ margin-bottom:1.5mm; }
+
+/* ---------- schemas ---------- */
+.schema{
+  text-align:center; margin:0 0 3mm 0; padding:4mm 0;
+  background:#fbfdfe; border:1px solid var(--bord); border-radius:3px;
+  page-break-inside:avoid; page-break-after:avoid;
+}
+.legende{ page-break-before:avoid; }
+.schema svg{ max-width:100%; height:auto; }
+
+.memo{ font-size:9.4pt; }
+.memo td{ padding:2mm 3mm; border-bottom:1px solid var(--bord); }
+.memo td:first-child{ font-family:Consolas,monospace; color:var(--bleuf); width:56mm; font-weight:600;}
+
+/* ---------- checklist ---------- */
+.check{ list-style:none; padding-left:0; }
+.check li{ padding-left:8mm; position:relative; margin-bottom:2.6mm; page-break-inside:avoid; }
+.check li::before{
+  content:""; position:absolute; left:0; top:1mm;
+  width:4.2mm; height:4.2mm; border:1.5px solid var(--bleu); border-radius:1px;
+}
+
+kbd{font-family:Consolas,monospace;font-size:8.8pt;background:#fff;border:1px solid #cfd8e0;border-bottom-width:2px;border-radius:3px;padding:0 4px;color:#384050;white-space:nowrap}
+
+/* ---------- surcouche dossier ---------- */
+body{ color:#2b3340; font-size:10.8pt; }
+.chap-intro{ color:#55606f; }
+.legende{ color:#5f6a79; }
+h3{
+  border-left:3.2mm solid var(--bleu); padding:1mm 0 1mm 3.2mm;
+  background:linear-gradient(90deg,#eaf4fb 0%,rgba(234,244,251,0) 78%);
+  border-radius:0 2px 2px 0;
+}
+li::marker{ color:var(--bleu); font-weight:700; }
+.check li::marker{ color:transparent; }
+table.t th{ background:linear-gradient(90deg,#00497c,#0074c7); }
+table.t td:first-child{ color:var(--bleuf); font-weight:600; }
+table.t tr:nth-child(even) td{ background:#f4f9fd; }
+.etape .n{ box-shadow:0 0 0 1.2mm #e3f0fa; }
+.schema{ background:#f8fcff; border-color:#bcdcf3; padding:3mm; }
+.schema img{ max-width:100%; height:auto; display:block; margin:0 auto;
+             border:1px solid #bcdcf3; border-radius:2px; }
+.encart{ border-left-width:5px; }
+.encart .titre{ font-size:9.6pt; }
+.chap-num{ background:linear-gradient(90deg,#0074c7,#2a97e0); }
+strong{ color:var(--bleuf); }
+
+/* chiffres cles, en couverture */
+.chiffres{ display:flex; gap:2.5mm; margin:0 0 9mm 0; }
+.chiffre{
+  flex:1; text-align:center; padding:4mm 1.5mm; border-radius:3px;
+  background:linear-gradient(160deg,#00497c,#0074c7);
+}
+.chiffre .n{ display:block; font-size:19pt; font-weight:800; line-height:1; color:#fff; }
+.chiffre .l{ display:block; font-size:7.6pt; margin-top:1.8mm; color:#cfe6f7;
+             letter-spacing:.04em; line-height:1.3; }
+
+/* sommaire pagine */
+.som-pg{ margin-left:auto; color:var(--bleu); font-weight:700; font-size:10pt; }
+
+/* fiche mesure */
+.mesure{
+  border:1px solid var(--bord); border-left:1.2mm solid var(--bleu);
+  border-radius:0 3px 3px 0; padding:3mm 3.5mm; margin:0 0 3.5mm;
+  background:#fff; page-break-inside:avoid;
+}
+.mesure > .titre{
+  display:block; font-weight:700; color:var(--bleuf);
+  font-size:10.6pt; margin-bottom:1.8mm;
+}
+.mesure p{ margin:0 0 1.5mm; }
+.mesure p:last-child{ margin-bottom:0; }
+.duo{ display:flex; gap:2.5mm; margin-top:2.5mm; }
+.duo > div{ flex:1; padding:2.2mm 2.6mm; border-radius:2px; font-size:9.1pt; line-height:1.45; }
+.duo b{ display:block; font-size:7.6pt; letter-spacing:.06em; text-transform:uppercase;
+        margin-bottom:1mm; font-weight:700; }
+.duo .ok2{ background:#eef7ea; color:#2c4e28; }
+.duo .ok2 b{ color:#4a7a3f; }
+.duo .ko2{ background:#fdf0ef; color:#5c2422; }
+.duo .ko2 b{ color:#b23a37; }
+
+/* citation detachee */
+.citation{
+  margin:5mm 0; padding:3.5mm 5mm; border-left:4mm solid var(--bleu);
+  background:#f4f9fd; font-size:11.8pt; line-height:1.45;
+  color:#00497c; font-style:italic; page-break-inside:avoid;
+}
+
+/* etiquette de categorie */
+.tag{
+  display:inline-block; padding:.3mm 1.8mm; margin-right:1.2mm; border-radius:2px;
+  font-size:7.2pt; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  color:#fff; vertical-align:2%;
+}
+.tag.s{ background:#cd2c2e; }
+.tag.p{ background:#0074c7; }
+.tag.q{ background:#5f8f4f; }
+ul.check{ page-break-inside:avoid; }
+ul.check.cols{ column-count:2; column-gap:9mm; }
+ul.check.cols li{ break-inside:avoid; }
+</style>
+</head>
+<body>
+<!-- ============ COUVERTURE ============ -->
+<section class="couv">
+  <div class="bandeau">
+    <div class="surtitre">Dossier de projet · Développeur Web</div>
+    <h1>Trouve<br>ton artisan</h1>
+    <p class="st">Kerras Zahcaria · octobre 2026</p>
+  </div>
+
+  <div class="chiffres">
+    <div class="chiffre"><span class="n">18</span><span class="l">mesures de sécurité</span></div>
+    <div class="chiffre"><span class="n">15</span><span class="l">incidents analysés</span></div>
+    <div class="chiffre"><span class="n">100</span><span class="l">accessibilité · SEO</span></div>
+    <div class="chiffre"><span class="n">0,04</span><span class="l">décalage de page</span></div>
+  </div>
+
+  <p class="accroche">« Une mesure de sécurité qu'on ne sait pas expliquer n'est pas une mesure : c'est une ligne de code recopiée. »</p>
+
+  <table class="fiche">
+    <tr><td>Le site</td><td>https://trouvetonartisan.alwaysdata.net</td></tr>
+    <tr><td>Le code</td><td>https://github.com/LePlankton/trouve-ton-artisan</td></tr>
+    <tr><td>Côté navigateur</td><td>React 19, React Router 7, Vite, Bootstrap 5.3 personnalisé en Sass</td></tr>
+    <tr><td>Côté serveur</td><td>Node.js, Express 5, Sequelize 6, MySQL, Nodemailer</td></tr>
+    <tr><td>Objet du dossier</td><td>Les mesures de sécurité mises en place, la démarche de veille, et les arbitrages assumés</td></tr>
+  </table>
+</section>
+
+<!-- ============ SOMMAIRE ============ -->
+<section class="sommaire">
+  <h2>Sommaire</h2>
+  <p class="chap-intro">Huit parties. Les deux premières posent le contexte, les quatre suivantes forment le cœur du dossier, les deux dernières assument ce qui n'a pas été fait.</p>
+
+  <div class="som-item"><span class="som-num">1</span><span class="som-txt">Le projet</span><span class="som-pg">3</span></div>
+  <div class="som-sub">1.1 Le besoin · 1.2 Ce que fait le site · 1.3 Les livrables</div>
+
+  <div class="som-item"><span class="som-num">2</span><span class="som-txt">Architecture et choix techniques</span><span class="som-pg">4</span></div>
+  <div class="som-sub">2.1 L'ensemble · 2.2 La base de données · 2.3 Un seul serveur en production · 2.4 L'organisation du code</div>
+
+  <div class="som-item"><span class="som-num">3</span><span class="som-txt">La sécurité</span><span class="som-pg">6</span></div>
+  <div class="som-sub">3.1 Vue d'ensemble · 3.2 La base de données · 3.3 Le serveur · 3.4 Le formulaire de contact · 3.5 Le navigateur · 3.6 La mise en ligne</div>
+
+  <div class="som-item"><span class="som-num">4</span><span class="som-txt">Ma démarche de veille</span><span class="som-pg">11</span></div>
+  <div class="som-sub">4.1 Pourquoi · 4.2 Mes sources · 4.3 Mon rythme · 4.4 Garder une trace</div>
+
+  <div class="som-item"><span class="som-num">5</span><span class="som-txt">Ce que la veille a produit</span><span class="som-pg">13</span></div>
+  <div class="som-sub">5.1 Une alerte évaluée, pas appliquée · 5.2 Six failles sur mon propre code · 5.3 Les pannes qui enseignent</div>
+
+  <div class="som-item"><span class="som-num">6</span><span class="som-txt">Qualité et audits</span><span class="som-pg">16</span></div>
+  <div class="som-sub">6.1 La méthode · 6.2 Accessibilité · 6.3 Validation HTML · 6.4 Référencement · 6.5 Performance</div>
+
+  <div class="som-item"><span class="som-num">7</span><span class="som-txt">Limites connues</span><span class="som-pg">20</span></div>
+  <div class="som-sub">7.1 Ce que je n'ai pas fait, et pourquoi · 7.2 Ce que je ferais ensuite</div>
+
+  <div class="som-item"><span class="som-num">8</span><span class="som-txt">Bilan</span><span class="som-pg">22</span></div>
+  <div class="som-sub">Ce que ce projet m'a appris</div>
+
+  <p class="citation">Ce dossier raconte autant ce que j'ai corrigé que ce que j'ai décidé de ne pas corriger. Les deux sont des choix d'ingénierie.</p>
+</section>
+
+<!-- ============ CHAPITRE 1 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 1</div>
+  <h2>Le projet</h2>
+  <p class="chap-intro">Un annuaire régional d'artisans, à construire de la maquette jusqu'à la mise en ligne.</p>
+
+  <h3>1.1 Le besoin</h3>
+  <p>La Région Auvergne-Rhône-Alpes souhaite un site permettant de trouver un artisan près de chez soi et de le contacter directement. Le parcours attendu tient en quatre étapes.</p>
+  <div class="schema">
+    <svg viewBox="0 0 620 92" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="Segoe UI, sans-serif">
+        <circle cx="62" cy="34" r="15" fill="#0074c7"/><text x="62" y="39" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">1</text>
+        <text x="62" y="68" fill="#384050" font-size="10.5" text-anchor="middle">Choisir une</text>
+        <text x="62" y="82" fill="#384050" font-size="10.5" text-anchor="middle">catégorie</text>
+
+        <circle cx="236" cy="34" r="15" fill="#0074c7"/><text x="236" y="39" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">2</text>
+        <text x="236" y="68" fill="#384050" font-size="10.5" text-anchor="middle">Choisir un</text>
+        <text x="236" y="82" fill="#384050" font-size="10.5" text-anchor="middle">artisan</text>
+
+        <circle cx="410" cy="34" r="15" fill="#0074c7"/><text x="410" y="39" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">3</text>
+        <text x="410" y="68" fill="#384050" font-size="10.5" text-anchor="middle">Le contacter par</text>
+        <text x="410" y="82" fill="#384050" font-size="10.5" text-anchor="middle">le formulaire</text>
+
+        <circle cx="565" cy="34" r="15" fill="#00497c"/><text x="565" y="39" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">4</text>
+        <text x="565" y="68" fill="#384050" font-size="10.5" text-anchor="middle">Réponse</text>
+        <text x="565" y="82" fill="#384050" font-size="10.5" text-anchor="middle">sous 48 h</text>
+
+        <path d="M80 34 L 216 34" stroke="#bcdcf3" stroke-width="2"/><polygon points="221,34 212,29 212,39" fill="#bcdcf3"/>
+        <path d="M254 34 L 390 34" stroke="#bcdcf3" stroke-width="2"/><polygon points="395,34 386,29 386,39" fill="#bcdcf3"/>
+        <path d="M428 34 L 545 34" stroke="#bcdcf3" stroke-width="2"/><polygon points="550,34 541,29 541,39" fill="#bcdcf3"/>
+      </g>
+    </svg>
+  </div>
+  <p>Le cadre était imposé : une maquette Figma à respecter, un jeu de données fourni, et une pile technique précise — React avec Bootstrap côté navigateur, Node.js avec Express et une base MySQL côté serveur.</p>
+
+  <h3>1.2 Ce que fait le site</h3>
+  <table class="t">
+    <tr><th>Page</th><th>Rôle</th></tr>
+    <tr><td>Accueil</td><td>le parcours en quatre étapes, et les artisans mis en avant</td></tr>
+    <tr><td>Catégorie</td><td>la liste des artisans d'une catégorie</td></tr>
+    <tr><td>Recherche</td><td>la liste filtrée par le nom saisi dans l'en-tête</td></tr>
+    <tr><td>Fiche artisan</td><td>le détail, et le formulaire de contact</td></tr>
+    <tr><td>Pages légales et 404</td><td>mentions, accessibilité, données personnelles, cookies, et toute adresse inconnue</td></tr>
+  </table>
+
+  <h3>1.3 Les livrables</h3>
+  <ul class="check cols">
+    <li>La maquette Figma : mobile, tablette, bureau</li>
+    <li>Le code source, sur un dépôt public</li>
+    <li>Les scripts SQL de la base</li>
+    <li>Le site en ligne, accessible publiquement</li>
+    <li>Un README d'installation</li>
+    <li>Le présent dossier</li>
+  </ul>
+</section>
+
+<!-- ============ CHAPITRE 2 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 2</div>
+  <h2>Architecture et choix techniques</h2>
+  <p class="chap-intro">Trois briques — un navigateur, un serveur, une base — et quelques décisions qui ont structuré tout le reste.</p>
+
+  <h3>2.1 L'ensemble</h3>
+  <div class="schema">
+    <svg viewBox="0 0 620 185" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="30" width="150" height="70" rx="5" fill="#00497c"/>
+      <text x="87" y="58" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Segoe UI, sans-serif" text-anchor="middle">Navigateur</text>
+      <text x="87" y="76" fill="#bcdcf3" font-size="10.5" font-family="Segoe UI, sans-serif" text-anchor="middle">React · Bootstrap</text>
+
+      <rect x="235" y="30" width="150" height="70" rx="5" fill="#0074c7"/>
+      <text x="310" y="58" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Segoe UI, sans-serif" text-anchor="middle">API</text>
+      <text x="310" y="76" fill="#d6ecfa" font-size="10.5" font-family="Segoe UI, sans-serif" text-anchor="middle">Express · Sequelize</text>
+
+      <rect x="458" y="30" width="150" height="70" rx="5" fill="#00497c"/>
+      <text x="533" y="58" fill="#ffffff" font-size="12.5" font-weight="700" font-family="Segoe UI, sans-serif" text-anchor="middle">Base</text>
+      <text x="533" y="76" fill="#bcdcf3" font-size="10.5" font-family="Segoe UI, sans-serif" text-anchor="middle">MySQL · lecture seule</text>
+
+      <path d="M164 55 L 229 55" fill="none" stroke="#0074c7" stroke-width="1.8"/>
+      <polygon points="234,55 225,50 225,60" fill="#0074c7"/>
+      <text x="196" y="47" fill="#5f6a79" font-size="9.5" font-family="Segoe UI, sans-serif" text-anchor="middle">JSON</text>
+      <path d="M229 80 L 166 80" fill="none" stroke="#9db6c9" stroke-width="1.5"/>
+      <polygon points="162,80 171,75 171,85" fill="#9db6c9"/>
+
+      <path d="M387 65 L 452 65" fill="none" stroke="#0074c7" stroke-width="1.8"/>
+      <polygon points="457,65 448,60 448,70" fill="#0074c7"/>
+      <text x="419" y="57" fill="#5f6a79" font-size="9.5" font-family="Segoe UI, sans-serif" text-anchor="middle">SELECT</text>
+
+      <rect x="235" y="128" width="150" height="44" rx="5" fill="#ffffff" stroke="#0074c7" stroke-width="1.4"/>
+      <text x="310" y="155" fill="#00497c" font-size="11.5" font-family="Segoe UI, sans-serif" text-anchor="middle">Serveur SMTP</text>
+      <path d="M310 104 L 310 124" fill="none" stroke="#9db6c9" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <polygon points="310,128 305,119 315,119" fill="#9db6c9"/>
+      <text x="470" y="152" fill="#5f6a79" font-size="10.5" font-family="Segoe UI, sans-serif" text-anchor="middle">formulaire de contact</text>
+    </svg>
+  </div>
+  <p class="legende">Le navigateur ne parle jamais à la base : il passe par l'API, qui seule détient les identifiants.</p>
+  <p>Cette séparation n'est pas une formalité d'architecture, c'est une mesure de sécurité. Les identifiants de la base ne quittent jamais le serveur, et l'API décide de ce qu'elle expose — ce qui, on le verra, demande d'être explicite.</p>
+
+  <h3>2.2 La base de données</h3>
+  <p>Trois tables : <code>categorie</code>, <code>specialite</code>, <code>artisan</code>. Un artisan appartient à une spécialité, une spécialité appartient à une catégorie. Quatre décisions méritent une explication.</p>
+  <table class="t">
+    <tr><th>Décision</th><th>Pourquoi</th></tr>
+    <tr><td>Aucune clé étrangère directe entre <code>artisan</code> et <code>categorie</code></td><td>la catégorie se déduit de la spécialité ; deux chemins vers la même information finiraient par se contredire</td></tr>
+    <tr><td><code>DECIMAL(2,1)</code> pour la note, pas <code>FLOAT</code></td><td>une note se compare et s'affiche à l'identique : il faut une valeur exacte, pas une approximation binaire</td></tr>
+    <tr><td><code>utf8mb4_unicode_ci</code></td><td>les accents s'affichent correctement, et une recherche sur « labbe » trouve « Labbé »</td></tr>
+    <tr><td>Noms de tables en minuscules</td><td>sous Linux, la casse compte ; ce choix fait en développement a évité une panne en production</td></tr>
+  </table>
+
+  <h3>2.3 Un seul serveur en production</h3>
+  <p>En développement, deux serveurs tournent : l'API sur un port, le site sur un autre. En production, l'offre d'hébergement retenue n'autorise qu'un seul site. L'API sert donc aussi les fichiers construits du front.</p>
+  <div class="encart bonne">
+    <span class="titre">Une contrainte devenue un avantage</span>
+    <p>Avec une seule origine, la question des requêtes entre domaines disparaît : le site appelle <code>/api</code>, en relatif. Une adresse à configurer au lieu de deux, un déploiement au lieu de deux, et une source d'erreur en moins.</p>
+  </div>
+  <p>Une règle d'ordre devient alors critique : les routes de l'API doivent être déclarées <strong>avant</strong> celle qui renvoie la page du site pour toute adresse inconnue. Dans l'autre sens, les appels de données recevraient du HTML.</p>
+
+  <h3>2.4 L'organisation du code</h3>
+  <p>Côté serveur, quatre dossiers qui séparent les responsabilités : <code>config</code> pour les connexions, <code>models</code> pour les tables, <code>controllers</code> pour la logique, <code>routes</code> pour les adresses. Côté navigateur, les pages d'un côté, les composants réutilisables de l'autre, et <strong>tous les appels à l'API regroupés dans un seul fichier</strong>.</p>
+  <p>Ce dernier point a servi plus tard : changer l'adresse de l'API entre développement et production n'a demandé de toucher qu'un endroit.</p>
+</section>
+
+<!-- ============ CHAPITRE 3 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 3</div>
+  <h2>La sécurité</h2>
+  <p class="chap-intro">Dix-huit mesures, regroupées par ce qu'elles protègent. Pour chacune : ce qu'elle empêche, et ce qu'elle n'empêche pas.</p>
+
+  <h3>3.1 Vue d'ensemble</h3>
+  <table class="t">
+    <tr><th>Niveau</th><th>Mesures</th></tr>
+    <tr><td>Base de données</td><td>compte en lecture seule, requêtes paramétrées, jeu de caractères explicite</td></tr>
+    <tr><td>Serveur</td><td>secrets hors du code, en-têtes de sécurité, limite de taille, erreurs muettes, démarrage bloquant</td></tr>
+    <tr><td>Formulaire</td><td>validation serveur, limitation de débit, destinataire issu de la base, expéditeur non usurpé</td></tr>
+    <tr><td>Navigateur</td><td>échappement automatique, aucun secret livré, <code>noreferrer</code>, double envoi bloqué</td></tr>
+    <tr><td>Mise en ligne</td><td>mots de passe distincts, HTTPS, variables d'environnement, données de test neutralisées</td></tr>
+  </table>
+
+  <h3>3.2 La base de données</h3>
+
+  <div class="mesure">
+    <span class="titre">Un compte MySQL en lecture seule</span>
+    <p>L'application se connecte avec un utilisateur dédié qui possède le seul droit de lecture, uniquement sur la base du projet. Au début j'utilisais le compte administrateur, ce qui est commode et absurde : mon site ne fait que des <code>SELECT</code>.</p>
+    <div class="duo">
+      <div class="ok2"><b>Ce qu'elle empêche</b>Qu'une faille permette de modifier, d'effacer, ou d'atteindre une autre base.</div>
+      <div class="ko2"><b>Ce qu'elle n'empêche pas</b>La lecture de données qui sont, de toute façon, déjà publiques.</div>
+    </div>
+  </div>
+
+  <div class="mesure">
+    <span class="titre">Aucune requête construite par concaténation</span>
+    <p>La barre de recherche envoie du texte libre. Si je l'insérais dans la requête, on pourrait y glisser du SQL. Sequelize envoie la valeur séparément de l'instruction : le moteur sait que c'est une donnée, jamais du code.</p>
+    <div class="duo">
+      <div class="ok2"><b>Ce qu'elle empêche</b>L'injection SQL, y compris sur un champ de recherche entièrement libre.</div>
+      <div class="ko2"><b>Ce qu'elle n'empêche pas</b>Une erreur de logique dans la requête elle-même.</div>
+    </div>
+  </div>
+
+  <div class="citation">On ne parie pas sur l'absence de faille : on borne à l'avance ce qu'elle permettrait.</div>
+
+  <div class="schema"><img src="captures/moindre-privilege-hebergement.png" alt="Refus MySQL #1142 sur le serveur de production"></div>
+  <p class="legende">Le moindre privilège vérifié en production : <code>#1142 — UPDATE command denied</code>. Le compte de l'application se voit refuser une écriture, sur le serveur réel.</p>
+  <p>J'ai rencontré ce refus sans l'avoir cherché, en voulant modifier des données depuis l'interface d'administration alors que j'étais connecté avec le compte applicatif. Je n'ai pas élargi ses droits : j'ai changé d'identité le temps de l'opération. <strong>Une protection ne se démonte pas pour une tâche ponctuelle.</strong></p>
+
+  <h3>3.3 Le serveur</h3>
+  <p><strong>Aucun mot de passe dans le code.</strong> Tout vit dans un fichier d'environnement ignoré par Git depuis le premier commit. À côté, un fichier d'exemple versionné porte les mêmes clés avec des valeurs vides : c'est la documentation de ce qu'il faut renseigner. J'ai vérifié à chaque commit que le vrai fichier ne partait pas — un secret publié une fois est à considérer comme perdu, même supprimé ensuite.</p>
+  <p><strong>Des en-têtes de sécurité posés automatiquement.</strong> Helmet ajoute notamment l'interdiction de deviner le type d'un fichier, l'interdiction d'afficher le site dans un cadre, et l'imposition du HTTPS pour les visites suivantes. Il retire au passage l'en-tête qui annonçait la technologie du serveur à qui voulait la lire.</p>
+  <p><strong>Une limite de taille sur les requêtes</strong> (100 ko). Sans elle, il suffit d'envoyer un fichier énorme pour saturer la mémoire du serveur.</p>
+  <p><strong>Des erreurs qui ne racontent rien.</strong> Un gestionnaire unique journalise le détail côté serveur et ne renvoie au visiteur qu'un message neutre. Il reprend le code porté par l'erreur quand il y en a un, et retombe sur 500 sinon.</p>
+  <div class="clair-box">
+    <span class="titre">Deux publics, deux messages</span>
+    <p>Au visiteur : « Une erreur est survenue. » Au journal : le type, la requête, la trace complète. Le même incident, raconté deux fois, avec deux niveaux de détail — parce qu'un message technique renseigne autant l'utilisateur perdu que l'attaquant curieux.</p>
+  </div>
+  <p><strong>Le serveur refuse de démarrer sans sa base.</strong> Si la connexion échoue, il s'arrête avec un code d'erreur au lieu de tourner en répondant n'importe quoi. Vérifié pour de vrai, en coupant le serveur MySQL.</p>
+
+  <div class="mesure">
+    <span class="titre">Les réponses n'exposent que les colonnes nécessaires</span>
+    <p>Chaque requête énumère les champs qu'elle renvoie. C'est le point sur lequel je me suis fait prendre — j'y reviens en partie 5.</p>
+    <div class="duo">
+      <div class="ok2"><b>Ce qu'elle empêche</b>Qu'une donnée personnelle sorte de l'API parce que personne n'a pensé à l'exclure.</div>
+      <div class="ko2"><b>Ce qu'elle n'empêche pas</b>Qu'on expose sciemment une colonne qu'il aurait fallu garder.</div>
+    </div>
+  </div>
+
+  <h3>3.4 Le formulaire de contact</h3>
+  <p>C'est la seule porte d'entrée du site : la seule route qui accepte des données du public, et la seule qui déclenche une action vers l'extérieur. Elle concentre donc quatre mesures.</p>
+  <div class="etape"><div class="n">1</div><div class="corps"><p><strong>Tout est revérifié côté serveur.</strong> Champs obligatoires, longueurs maximales, présence d'un <code>@</code> dans l'adresse. La validation du navigateur est un confort pour l'utilisateur, pas une protection : on peut appeler l'API sans passer par ma page.</p></div></div>
+  <div class="etape"><div class="n">2</div><div class="corps"><p><strong>Cinq envois par quart d'heure et par adresse IP.</strong> Sans limite, un robot martèle le formulaire : l'artisan reçoit des centaines de messages et le compte d'envoi se fait bloquer pour abus. La limite ne vise que cette route — consulter le catalogue reste libre.</p></div></div>
+  <div class="etape"><div class="n">3</div><div class="corps"><p><strong>Le destinataire vient de la base, jamais de la requête.</strong> L'adresse de l'artisan est retrouvée à partir de son identifiant. Si le navigateur pouvait dire « envoie à telle adresse », le serveur deviendrait une machine à spam ouverte à tous.</p></div></div>
+  <div class="etape"><div class="n">4</div><div class="corps"><p><strong>L'expéditeur est le site, le visiteur est en adresse de réponse.</strong> J'avais d'abord mis l'adresse du visiteur comme expéditeur. Ça fonctionnait sur un serveur de test, mais en conditions réelles les contrôles du destinataire vérifient si mon serveur a le droit d'écrire au nom de ce domaine — et la réponse est non.</p></div></div>
+
+  <div class="schema"><img src="captures/contact-entetes.png" alt="En-têtes du message reçu : From, Reply-To et rapport anti-spam"></div>
+  <p class="legende">Les en-têtes d'un message réellement reçu. <code>From</code> porte le domaine du site ; <code>Reply-To</code> porte l'adresse du visiteur.</p>
+
+  <div class="encart danger">
+    <span class="titre">Cette mesure a un coût, et je l'assume</span>
+    <p>Le rapport anti-spam visible sur cette capture attribue <strong>2 points sur un seuil de 5</strong> à la ligne « adresse de réponse chez un fournisseur grand public, différente de l'expéditeur » — c'est-à-dire exactement le motif que j'ai mis en place. Il ressemble à une technique de spammeur. Sans lui, le message serait purement rejeté pour usurpation. Deux points, c'est le prix.</p>
+  </div>
+  <div class="citation">Aucune mesure de sécurité n'est gratuite. Savoir nommer ce qu'elle coûte vaut mieux que de réciter qu'elle est bonne.</div>
+
+  <h3>3.5 Le navigateur</h3>
+  <p><strong>Aucun secret dans la configuration du front.</strong> Tout ce qui y est déclaré se retrouve dans les fichiers livrés au navigateur et reste lisible par n'importe qui. Il n'y a donc que l'adresse de l'API, qui est publique de toute façon.</p>
+  <p><strong>React échappe le texte par défaut.</strong> Un nom contenant une balise s'afficherait tel quel au lieu d'être interprété. C'est une protection intégrée contre l'injection de code dans la page, qui ne saute que si l'on emploie explicitement la fonction prévue pour insérer du HTML brut — ce que je ne fais nulle part.</p>
+  <p><strong>Les liens externes portent <code>rel="noreferrer"</code></strong>, puisqu'ils s'ouvrent dans un nouvel onglet. Sans cela, la page ouverte peut remplacer la mienne par une copie.</p>
+  <p><strong>Le bouton d'envoi se désactive pendant la requête</strong>, ce qui évite le double clic — donc le double message, et deux appels comptés par la limitation au lieu d'un.</p>
+
+  <div class="mesure">
+    <span class="titre">Le filtrage d'origines : la mesure la plus mal comprise</span>
+    <p>Le serveur n'accepte les requêtes du navigateur que depuis une liste d'origines déclarées explicitement, sans caractère générique en production.</p>
+    <div class="duo">
+      <div class="ok2"><b>Ce qu'elle empêche</b>Qu'un site malveillant utilise le navigateur d'un de mes visiteurs pour interroger mon API en son nom.</div>
+      <div class="ko2"><b>Ce qu'elle n'empêche pas</b>D'obtenir mes données : un script ou un appel en ligne de commande ignorent complètement ces en-têtes.</div>
+    </div>
+  </div>
+
+  <h3>3.6 La mise en ligne</h3>
+  <table class="t">
+    <tr><th>Mesure</th><th>Raison</th></tr>
+    <tr><td>Mot de passe de base différent de celui du poste de développement</td><td>si l'un fuite, l'autre tient</td></tr>
+    <tr><td>Mot de passe de la boîte d'envoi distinct des deux autres</td><td>un secret, un usage</td></tr>
+    <tr><td>Secrets saisis dans les variables d'environnement de l'hébergeur</td><td>le dépôt ne transporte que la liste des clés</td></tr>
+    <tr><td>HTTPS avec redirection automatique</td><td>le formulaire transmet des données personnelles</td></tr>
+    <tr><td>Origines autorisées déclarées explicitement</td><td>pas de caractère générique en production</td></tr>
+  </table>
+  <div class="encart cle">
+    <span class="titre">Les données de démonstration ne doivent atteindre personne</span>
+    <p>Le jeu de données fourni contient des adresses e-mail d'apparence réelle, chez de vrais fournisseurs. Tant que le site tournait sur ma machine, aucune conséquence. En ligne, le formulaire pouvait réellement écrire à ces personnes — et n'importe quel visiteur pouvait le déclencher.</p>
+    <p>J'ai donc redirigé ces adresses vers une boîte que je contrôle, <strong>uniquement dans la base hébergée</strong> : le script de remplissage livré conserve les données imposées. La démonstration reste complète, et personne n'est importuné.</p>
+  </div>
+</section>
+
+<!-- ============ CHAPITRE 4 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 4</div>
+  <h2>Ma démarche de veille</h2>
+  <p class="chap-intro">Pas une collection de liens : une routine, des critères de tri, et une trace écrite des décisions.</p>
+
+  <h3>4.1 Pourquoi</h3>
+  <p>Un projet qui fonctionne le jour de sa livraison ne fonctionne pas pour autant six mois plus tard. Les failles se découvrent après coup, dans des bibliothèques qu'on n'a pas écrites. La veille n'est donc pas un supplément : c'est la condition pour qu'un site reste sûr une fois livré.</p>
+
+  <h3>4.2 Mes sources</h3>
+  <table class="t">
+    <tr><th>Source</th><th>Ce que j'y cherche</th></tr>
+    <tr><td>CERT-FR (ANSSI)</td><td>les alertes officielles, en français, avec un niveau de gravité</td></tr>
+    <tr><td>OWASP Top 10</td><td>la grille de lecture : les dix familles de failles les plus courantes</td></tr>
+    <tr><td><code>npm audit</code></td><td>les vulnérabilités connues dans mes propres dépendances</td></tr>
+    <tr><td>Alertes Dependabot</td><td>la même chose, mais signalée automatiquement sur le dépôt</td></tr>
+    <tr><td>Notes de version de Node.js</td><td>les versions correctives, et ce qu'elles corrigent</td></tr>
+    <tr><td>MDN</td><td>comprendre un en-tête HTTP ou un mécanisme du navigateur, plutôt que le recopier</td></tr>
+  </table>
+  <p>Pour l'accessibilité, je croise trois outils — un audit intégré au navigateur, une extension spécialisée, et le validateur HTML du W3C — et aucun ne remplace le parcours de la page au clavier. C'est souvent là que je trouve ce qu'aucun outil n'a signalé.</p>
+
+  <h3>4.3 Mon rythme</h3>
+  <div class="schema">
+    <svg viewBox="0 0 620 120" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="Segoe UI, sans-serif">
+        <line x1="20" y1="60" x2="600" y2="60" stroke="#bcdcf3" stroke-width="2.5"/>
+
+        <circle cx="105" cy="60" r="9" fill="#0074c7"/>
+        <text x="105" y="34" fill="#00497c" font-size="11" font-weight="700" text-anchor="middle">Chaque semaine</text>
+        <text x="105" y="88" fill="#5f6a79" font-size="10" text-anchor="middle">une demi-heure,</text>
+        <text x="105" y="102" fill="#5f6a79" font-size="10" text-anchor="middle">créneau fixe</text>
+
+        <circle cx="310" cy="60" r="9" fill="#0074c7"/>
+        <text x="310" y="34" fill="#00497c" font-size="11" font-weight="700" text-anchor="middle">À chaque dépendance</text>
+        <text x="310" y="88" fill="#5f6a79" font-size="10" text-anchor="middle">vérification systématique</text>
+        <text x="310" y="102" fill="#5f6a79" font-size="10" text-anchor="middle">avant de l'installer</text>
+
+        <circle cx="520" cy="60" r="9" fill="#00497c"/>
+        <text x="520" y="34" fill="#00497c" font-size="11" font-weight="700" text-anchor="middle">Avant la livraison</text>
+        <text x="520" y="88" fill="#5f6a79" font-size="10" text-anchor="middle">audit complet,</text>
+        <text x="520" y="102" fill="#5f6a79" font-size="10" text-anchor="middle">captures à l'appui</text>
+      </g>
+    </svg>
+  </div>
+  <p class="legende">Trois moments, trois objectifs différents. L'objectif hebdomadaire n'est pas de tout lire, mais de repérer ce qui touche à ce que j'utilise.</p>
+
+  <h3>4.4 Garder une trace</h3>
+  <p>C'est le point que j'ai compris en cours de projet. Ma démarche est toujours la même : je regarde ce qui est sorti, je garde ce qui concerne mon projet, je décide d'appliquer ou non, <strong>et je note la décision</strong>.</p>
+  <div class="encart bonne">
+    <span class="titre">« Je n'ai pas appliqué, et voici pourquoi » est une décision</span>
+    <p>Une veille sans trace écrite ne sert à rien : six mois plus tard, on ne sait plus si une alerte a été évaluée ou simplement ignorée. Écrire le raisonnement — y compris celui qui conduit à ne rien faire — est ce qui transforme une lecture en décision.</p>
+  </div>
+</section>
+
+<!-- ============ CHAPITRE 5 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 5</div>
+  <h2>Ce que la veille a produit</h2>
+  <p class="chap-intro">Quinze incidents réels relevés pendant le projet. En voici les plus instructifs, avec à chaque fois le symptôme, la cause, et ce que j'en retiens.</p>
+
+  <h3>5.1 Une alerte évaluée, pas appliquée</h3>
+  <p><span class="tag s">Dépendances</span> Après l'installation de la bibliothèque d'envoi d'e-mails, <code>npm audit</code> a signalé une faille de gravité moyenne dans une dépendance indirecte de Sequelize. La correction automatique proposée rétrogradait Sequelize de plusieurs versions majeures — autant dire qu'elle cassait tout le projet.</p>
+  <p>J'ai lu le détail de l'alerte : la faille concerne un usage précis de cette bibliothèque que mon code ne fait pas. J'ai donc choisi de ne rien changer, de noter l'alerte, et d'attendre la mise à jour de la dépendance.</p>
+  <div class="encart cle">
+    <span class="titre">C'est l'exemple qui m'a fait comprendre ce qu'est une veille</span>
+    <p>Appliquer aveuglément la correction proposée aurait cassé le projet pour une faille qui ne me concernait pas. Une veille, ce n'est pas exécuter ce que l'outil recommande : c'est <strong>évaluer si l'alerte s'applique à mon cas</strong>, puis décider.</p>
+  </div>
+
+  <h3>5.2 Six failles trouvées sur mon propre code</h3>
+  <p><span class="tag s">Fuite d'information</span> <strong>Mes pages d'erreur racontaient tout.</strong> En provoquant une erreur de base de données, j'ai vu s'afficher dans le navigateur l'arborescence complète de mon disque, le chemin de mes fichiers et la version de ma bibliothèque. C'est le comportement par défaut du framework. Pour quelqu'un qui cherche une faille, c'est une carte du terrain.</p>
+  <p><span class="tag s">Données personnelles</span> <strong>Mon API publiait les adresses e-mail des artisans.</strong> La route de détail faisait une requête sans énumérer les colonnes attendues : la bibliothèque renvoyait donc toute la ligne, e-mail compris, sur une route publique. Mon interface n'affichait jamais cette adresse — elle sortait quand même, lisible par quiconque appelait l'API directement.</p>
+  <div class="encart danger">
+    <span class="titre">On énumère ce qu'on expose, on ne retranche pas ce qu'on cache</span>
+    <p>Sans liste explicite, toute colonne ajoutée plus tard à la table sortirait automatiquement dans l'API : un numéro de téléphone, un commentaire interne, un mot de passe. Personne ne s'en apercevrait, puisque l'interface ne les afficherait pas. C'est une fuite silencieuse — et, s'agissant de données personnelles, un manquement au principe de minimisation.</p>
+  </div>
+  <p><span class="tag s">Fuite d'information</span> <strong>Un en-tête qui annonçait ma technologie.</strong> Repéré en lisant les en-têtes de réponse d'une route. Le retirer ne coûte rien.</p>
+  <p><span class="tag p">Panne silencieuse</span> <strong>Une limite de taille mal orthographiée.</strong> J'avais écrit l'unité à la française au lieu de l'anglaise. Le framework n'a pas protesté au démarrage : il a simplement compris « 10 octets », et tout formulaire aurait été refusé. Aucune erreur visible tant qu'on ne teste pas réellement — ce qui vaut pour beaucoup de réglages de sécurité.</p>
+  <p><span class="tag p">Régression</span> <strong>Un code d'erreur écrit en dur.</strong> En traitant le cas d'un corps de requête trop volumineux, j'avais figé le statut correspondant… ce qui faisait répondre « votre message est trop long » à <em>toutes</em> les pannes, base de données coupée comprise. Le bon réflexe était de reprendre le code porté par l'erreur et de ne retomber sur l'erreur générique que par défaut.</p>
+  <div class="clair-box">
+    <span class="titre">Une correction qui marche sur le cas testé peut être fausse partout ailleurs</span>
+    <p>C'est l'erreur la plus intéressante que j'ai commise : elle passait tous mes tests, puisque je testais le cas que je venais de corriger.</p>
+  </div>
+  <p><span class="tag p">Configuration</span> <strong>Mon propre filtrage d'origines m'a bloqué.</strong> En testant la version construite, toutes les requêtes échouaient. L'API répondait pourtant : c'est le navigateur qui refusait de me transmettre la réponse, parce que le port de prévisualisation n'était pas autorisé. J'ai perdu dix minutes de plus à cause d'une barre oblique finale écrite en trop — une origine, c'est un protocole, un hôte et un port, rien d'autre.</p>
+
+  <h3>5.3 Les pannes qui enseignent</h3>
+  <p><span class="tag p">Production</span> <strong>Une page blanche que je ne pouvais pas voir en développement.</strong> Une fois en ligne, une page de catégorie ne s'affichait plus du tout : écran vide, et dans la console une erreur de lecture sur une valeur indéfinie. L'API, elle, répondait correctement.</p>
+  <p>L'explication : les catégories sont chargées par le gabarit commun, et pendant ce temps la page cherchait la sienne dans un tableau encore vide. Je n'avais jamais vu le défaut parce que j'arrivais toujours sur cette page <strong>en cliquant dans le menu</strong>, donc après le chargement. Un visiteur qui colle l'adresse ou arrive depuis un moteur de recherche, lui, démarre de zéro.</p>
+  <div class="encart cle">
+    <span class="titre">Chaque adresse doit fonctionner en entrée directe</span>
+    <p>J'avais protégé l'affichage du titre, mais pas la métadonnée juste au-dessus — et <strong>une seule lecture non protégée suffit à faire tomber toute la page</strong>. Depuis, je teste chaque type d'adresse en la collant directement dans la barre du navigateur, jamais seulement en naviguant.</p>
+  </div>
+  <p><span class="tag p">Production</span> <strong>Linux ne pardonne pas les majuscules.</strong> Une requête sur une table a échoué en production avec « n'existe pas », alors que la table est bien là. Sur le serveur, les noms sont sensibles à la casse, contrairement à mon environnement de développement sous Windows. Mes modèles déclaraient déjà le nom exact en minuscules — c'est ce qui a sauvé l'application. Le vrai « ça marche chez moi ».</p>
+  <p><span class="tag p">Déploiement</span> <strong>Un correctif qui ne corrigeait rien.</strong> J'ai cherché une demi-heure pourquoi une correction de l'interface restait sans effet en ligne. Elle était faite, construite, envoyée — mais j'avais lancé la commande de transfert <strong>depuis la session distante</strong>, si bien qu'elle cherchait les fichiers sur le serveur au lieu de ma machine. Aucune erreur signalée.</p>
+  <div class="encart bonne">
+    <span class="titre">Vérifier ce qui est réellement servi, pas ce qu'on a tapé</span>
+    <p>Les fichiers construits portent une empreinte dans leur nom. Si elle n'a pas changé après un déploiement, c'est que rien n'est arrivé. Ce contrôle de dix secondes m'aurait évité une demi-heure de recherche.</p>
+  </div>
+  <p><span class="tag q">Performance</span> <strong>Une image onze fois trop grande, et une autre à 585 ko.</strong> Mon logo faisait 1401 pixels de large pour un affichage à 127, et la photo de la fiche artisan pesait près de 600 ko. La règle que j'applique depuis : exporter au <strong>double</strong> de la taille d'affichage — pour les écrans à haute densité — et pas plus.</p>
+  <p><span class="tag q">Référencement</span> <strong>Un « s » oublié qui m'a coûté huit points.</strong> L'audit signalait un fichier de racine invalide, avec vingt et une erreurs. Le contenu analysé était en réalité la page d'accueil du site : mon fichier était mal nommé, et la requête tombait donc sur la règle qui renvoie l'application pour toute adresse inconnue. Un fichier qui n'existe pas se comporte comme un fichier au contenu absurde.</p>
+</section>
+
+<!-- ============ CHAPITRE 6 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 6</div>
+  <h2>Qualité et audits</h2>
+  <p class="chap-intro">Quatre domaines mesurés, avant et après correction, sur la version réellement livrée.</p>
+
+  <h3>6.1 La méthode</h3>
+  <p>Trois principes, appris en cours de route :</p>
+  <ul class="check">
+    <li>Auditer la <strong>version construite</strong>, jamais le mode développement — qui ne compresse rien et sert les fichiers autrement</li>
+    <li>Auditer <strong>deux pages</strong> au minimum : l'accueil, et la page la plus riche</li>
+    <li>Garder les captures <strong>avant et après</strong>, avec l'adresse testée visible à l'écran</li>
+  </ul>
+  <div class="encart danger">
+    <span class="titre">Un score de 100 ne veut pas dire « accessible »</span>
+    <p>Les outils automatiques détectent environ la moitié des problèmes : ceux qui se mesurent. Ils ne savent pas si un texte alternatif décrit vraiment l'image, ni si l'ordre de lecture a du sens. Un score parfait signifie « aucun défaut automatiquement détectable », rien de plus.</p>
+  </div>
+
+  <h3>6.2 Accessibilité</h3>
+  <p>Score de <strong>100</strong> sur l'accueil et sur la fiche artisan, en ligne. Deux corrections l'ont permis.</p>
+  <p><strong>Les textes d'invite des champs étaient illisibles.</strong> En mesurant, j'ai trouvé un rapport de contraste de 1,7:1 là où la norme en demande 4,5. La couleur venait directement de mon système de design, où je l'avais choisie « pour que ça ne gêne pas ». C'est précisément le problème : un texte d'invite porte une information, il doit se lire. Je suis passé à une valeur mesurée à 5,4:1 — <strong>et j'ai corrigé la maquette aussi</strong>, sinon mes deux livrables se contredisaient.</p>
+  <p><strong>Une règle de style écrite sur une balise sans classe</strong> repeignait tous les paragraphes du site, y compris ceux écrits en blanc sur fond coloré — et cassait le contraste d'une page que je n'avais pas touchée. Je vérifie désormais qu'aucun fichier de style ne cible une balise nue.</p>
+  <p>Au-delà des outils : un lien d'évitement en tête de page, un parcours complet au clavier sur chaque écran, un seul titre principal par page, et des contours de focus toujours visibles.</p>
+
+  <h3>6.3 Validation HTML</h3>
+  <div class="schema"><img src="captures/w3c-accueil.png" alt="Validateur W3C : aucune erreur sur la page d'accueil"></div>
+  <p class="legende">Validation W3C de la page d'accueil : aucune erreur.</p>
+  <p>Valider une application dont le HTML est produit par le navigateur demande une méthode particulière : on copie le document tel qu'il est rendu, et on n'oublie pas d'ajouter la déclaration de type en première ligne — la copie ne l'inclut jamais, et son absence provoque une erreur trompeuse.</p>
+
+  <h3>6.4 Référencement</h3>
+  <p>Score de <strong>100</strong>. Chaque page porte un titre et une description qui lui sont propres, construits à partir des données affichées : la fiche d'un artisan annonce son nom, sa spécialité et sa ville.</p>
+  <p>Deux corrections ont été nécessaires : supprimer les métadonnées en double — le fichier de base et l'application en déclaraient chacun un jeu — et renommer correctement le fichier destiné aux robots d'indexation.</p>
+
+  <h3>6.5 Performance</h3>
+  <div class="schema">
+    <svg viewBox="0 0 620 170" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="Segoe UI, sans-serif">
+        <text x="150" y="18" fill="#00497c" font-size="11.5" font-weight="700" text-anchor="middle">Score de performance</text>
+        <text x="455" y="18" fill="#00497c" font-size="11.5" font-weight="700" text-anchor="middle">Décalage de mise en page</text>
+
+        <!-- barres performance -->
+        <rect x="60" y="40" width="216" height="26" fill="#eef3f7"/>
+        <rect x="60" y="40" width="155" height="26" fill="#9db6c9"/>
+        <text x="48" y="58" fill="#5f6a79" font-size="10" text-anchor="end">avant</text>
+        <text x="225" y="58" fill="#384050" font-size="11" font-weight="700">72</text>
+
+        <rect x="60" y="76" width="216" height="26" fill="#eef3f7"/>
+        <rect x="60" y="76" width="177" height="26" fill="#0074c7"/>
+        <text x="48" y="94" fill="#5f6a79" font-size="10" text-anchor="end">après</text>
+        <text x="247" y="94" fill="#00497c" font-size="11" font-weight="700">82</text>
+
+        <!-- barres CLS -->
+        <rect x="370" y="40" width="200" height="26" fill="#eef3f7"/>
+        <rect x="370" y="40" width="193" height="26" fill="#cd2c2e"/>
+        <text x="358" y="58" fill="#5f6a79" font-size="10" text-anchor="end">avant</text>
+        <text x="573" y="58" fill="#384050" font-size="11" font-weight="700">0,518</text>
+
+        <rect x="370" y="76" width="200" height="26" fill="#eef3f7"/>
+        <rect x="370" y="76" width="14" height="26" fill="#82b864"/>
+        <text x="358" y="94" fill="#5f6a79" font-size="10" text-anchor="end">après</text>
+        <text x="392" y="94" fill="#2f6b2f" font-size="11" font-weight="700">0,038</text>
+
+        <line x1="20" y1="122" x2="600" y2="122" stroke="#dde6ee" stroke-width="1"/>
+        <text x="310" y="145" fill="#5f6a79" font-size="10.5" text-anchor="middle">Requêtes vers des domaines externes : 2 avant, 0 après.</text>
+        <text x="310" y="161" fill="#5f6a79" font-size="10.5" text-anchor="middle">Premier affichage : 3,8 s avant, 3,3 s après.</text>
+      </g>
+    </svg>
+  </div>
+  <p class="legende">Accueil, mesuré en ligne. Le score de performance est la médiane de trois lancements.</p>
+
+  <div class="schema"><img src="captures/lighthouse-accueil-en-ligne.png" alt="Audit Lighthouse de l'accueil en ligne"></div>
+  <p class="legende">Accessibilité, bonnes pratiques et référencement à 100, décalage de mise en page nul.</p>
+
+  <p><strong>Les logos ne réservaient pas leur place.</strong> Sans dimensions déclarées, le navigateur leur donne une hauteur nulle jusqu'à l'arrivée du fichier — et toute la page sursaute. Quatre attributs ajoutés, et l'indicateur est passé de 0,518 à 0. Le style continue de commander la taille réelle ; les attributs ne servent qu'à réserver l'espace.</p>
+  <p><strong>La police était chargée chez un tiers.</strong> Deux domaines externes, une feuille de style bloquante et un fichier de police, soit environ 1,2 seconde avant le premier pixel. En hébergeant la police avec le site, ces requêtes disparaissent.</p>
+  <div class="encart bonne">
+    <span class="titre">Ce n'était pas qu'une optimisation</span>
+    <p>Chaque appel à un service de polices distant transmet l'<strong>adresse IP du visiteur</strong> à un tiers, sans son consentement. La CNIL recommande explicitement l'auto-hébergement des polices. Le gain de temps est réel ; la mise en conformité l'est davantage.</p>
+  </div>
+  <p>Un conseil de l'outil n'a <strong>pas</strong> été suivi : il proposait de réduire les logos à leur taille d'affichage exacte. Mes fichiers font déjà le double, ce qu'il faut pour les écrans à haute densité. L'outil ne connaît pas cette contrainte — il signale, il ne décide pas.</p>
+</section>
+
+<!-- ============ CHAPITRE 7 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 7</div>
+  <h2>Limites connues</h2>
+  <p class="chap-intro">Deux défauts identifiés, mesurés, et volontairement non corrigés. Les taire serait plus grave que de les avoir.</p>
+
+  <h3>7.1 Ce que je n'ai pas fait, et pourquoi</h3>
+  <div class="encart danger">
+    <span class="titre">Bootstrap est importé dans son intégralité</span>
+    <p><strong>Le constat :</strong> environ 217 ko de feuille de style ne sont jamais appliqués, et bloquent le premier affichage pendant 2,2 secondes. C'est, de loin, le premier poste de lenteur du site.</p>
+    <p><strong>La correction :</strong> n'importer que les modules réellement employés.</p>
+    <p><strong>Pourquoi je ne l'ai pas faite :</strong> un module retiré par erreur casse des styles <em>sans aucun message d'erreur</em>. Il aurait fallu revérifier chaque page, à chaque format, à quelques jours de la livraison. Le risque de régression silencieuse l'emportait sur le gain.</p>
+  </div>
+  <div class="encart danger">
+    <span class="titre">La fiche artisan s'affiche d'un seul bloc</span>
+    <p><strong>Le constat :</strong> la page affiche « Chargement… » puis la remplace entièrement. Cela provoque un décalage et empêche le navigateur de repérer l'image principale à l'avance. Score de performance : 55.</p>
+    <p><strong>La correction :</strong> afficher la structure de la page immédiatement, et n'attendre que les textes.</p>
+    <p><strong>Pourquoi je ne l'ai pas faite :</strong> c'est la page qui porte le formulaire de contact, la partie la plus délicate du site. Je ne voulais pas en modifier la logique d'affichage sans avoir le temps de tout revalider.</p>
+  </div>
+  <div class="citation">Un site cohérent avec un défaut documenté vaut mieux qu'un site optimisé la veille et cassé quelque part.</div>
+
+  <h3>7.2 Ce que je ferais ensuite</h3>
+  <table class="t">
+    <tr><th>Piste</th><th>Ce qu'elle apporterait</th></tr>
+    <tr><td>Alléger la feuille de style</td><td>le plus gros gain de performance disponible</td></tr>
+    <tr><td>Afficher la structure pendant le chargement</td><td>supprime le décalage restant sur la fiche</td></tr>
+    <tr><td>Limitation de débit partagée, hors mémoire</td><td>le compteur actuel repart à zéro à chaque redémarrage</td></tr>
+    <tr><td>Journalisation persistante des erreurs</td><td>pouvoir diagnostiquer un incident passé, pas seulement présent</td></tr>
+    <tr><td>Tests automatisés sur les routes de l'API</td><td>détecter une régression sans avoir à tout reparcourir à la main</td></tr>
+  </table>
+</section>
+
+<!-- ============ CHAPITRE 8 ============ -->
+<section class="chapitre">
+  <div class="chap-num">Partie 8</div>
+  <h2>Bilan</h2>
+  <p class="chap-intro">Ce que je savais faire avant ce projet, et ce que j'ai appris en le faisant.</p>
+
+  <h3>Trois choses que j'ai comprises</h3>
+  <div class="mesure">
+    <span class="titre">La sécurité n'est pas une liste à cocher</span>
+    <p>Chaque mesure répond à une attaque précise, en empêche certaines et pas d'autres. Le filtrage d'origines, par exemple, ne protège pas l'API : un script l'ignore complètement et obtient les mêmes données. Il empêche qu'un site malveillant utilise le navigateur d'un de mes visiteurs. Confondre les deux, c'est se croire protégé là où on ne l'est pas.</p>
+  </div>
+  <div class="mesure">
+    <span class="titre">Les pannes les plus instructives sont silencieuses</span>
+    <p>Une unité mal orthographiée, une commande lancée depuis la mauvaise machine, une colonne qui sort d'une requête sans qu'on l'ait demandée : aucune de ces erreurs ne produit de message. Elles s'attrapent en vérifiant le résultat réel, pas en relisant ce qu'on a écrit.</p>
+  </div>
+  <div class="mesure">
+    <span class="titre">Documenter une décision vaut autant que la prendre</span>
+    <p>Une alerte évaluée puis écartée, un défaut mesuré puis assumé : ce sont des décisions d'ingénierie, pas des oublis. Écrire le raisonnement — y compris celui qui conduit à ne rien faire — est ce qui les distingue.</p>
+  </div>
+
+  <h3>Ce que je retiens pour la suite</h3>
+  <p>Le passage en production a été la partie la plus formatrice du projet. Il ne révèle pas de nouveaux défauts : il révèle ceux que ma machine masquait. La casse des noms de fichiers, les adresses écrites en dur, l'état initial d'une page, les droits d'un compte — tout cela était déjà faux avant, je ne pouvais simplement pas le voir.</p>
+  <div class="encart bonne">
+    <span class="titre">La phrase que je garde</span>
+    <p>On ne parie pas sur l'absence de faille : <strong>on borne à l'avance ce qu'elle permettrait.</strong> C'est vrai du compte de base de données en lecture seule, de la liste des colonnes exposées, de la limite de taille des requêtes et du nombre d'envois par quart d'heure. Quatre mesures, un seul raisonnement.</p>
+  </div>
+</section>
+
+</body>
+</html>
